@@ -1,3 +1,5 @@
+import Foundation
+
 /// The languages the app speaks. Arabic is the default.
 public enum AppLanguage: String, CaseIterable, Sendable {
     case arabic = "ar"
@@ -83,6 +85,42 @@ public struct Words: Sendable {
     public func weekday(_ day: DayKey) -> String {
         pick(Self.arabicWeekdays[day.weekdayIndex], Self.englishWeekdays[day.weekdayIndex])
     }
+
+    /// 12-hour clock in Riyadh time: "5:20 ص" / "5:20 AM".
+    public func time(_ instant: Date) -> String {
+        let parts = Self.riyadhCalendar.dateComponents([.hour, .minute], from: instant)
+        let hour = parts.hour!, minute = parts.minute!
+        let clock = "\(hour % 12 == 0 ? 12 : hour % 12):\(minute < 10 ? "0" : "")\(minute)"
+        let morning = hour < 12
+        return "\(clock) " + pick(morning ? "ص" : "م", morning ? "AM" : "PM")
+    }
+
+    /// A streak badge by its length in days.
+    public func badge(_ days: Int) -> String {
+        switch days {
+        case 7: pick("أسبوع", "A week")
+        case 30: pick("شهر", "A month")
+        case 40: pick("أربعون يومًا", "40 days")
+        case 100: pick("مئة يوم", "100 days")
+        default: self.days(days)
+        }
+    }
+
+    public func building(_ building: Building) -> String {
+        switch building {
+        case .well: pick("البئر", "Well")
+        case .farmhouse: pick("البيت النجدي", "Najdi farmhouse")
+        case .courtyard: pick("الفناء", "Courtyard")
+        case .gate: pick("البوابة", "Gate")
+        case .mosque: pick("المسجد", "Mosque")
+        }
+    }
+
+    static let riyadhCalendar: Calendar = {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "Asia/Riyadh")!
+        return calendar
+    }()
 
     static let arabicHijriMonths = [
         "محرم", "صفر", "ربيع الأول", "ربيع الآخر", "جمادى الأولى", "جمادى الآخرة", "رجب", "شعبان", "رمضان",

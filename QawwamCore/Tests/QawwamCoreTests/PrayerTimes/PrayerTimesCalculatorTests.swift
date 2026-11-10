@@ -84,3 +84,24 @@ private func minutes(_ from: Date, _ to: Date) -> Double {
         #expect(day.date == outsideRamadan)
     }
 }
+
+@Suite struct RoundingTests {
+    @Test func prayerStartsRoundUpToTheNextMinute() {
+        let raw = Date(timeIntervalSince1970: 60 * 1000 + 1)
+
+        #expect(PrayerTimesCalculator.roundedUp(raw) == Date(timeIntervalSince1970: 60 * 1001))
+    }
+
+    @Test func sunriseRoundsDownToTheMinute() {
+        let raw = Date(timeIntervalSince1970: 60 * 1000 + 59)
+
+        #expect(PrayerTimesCalculator.roundedDown(raw) == Date(timeIntervalSince1970: 60 * 1000))
+    }
+
+    @Test func wholeMinutesAreLeftAlone() {
+        let exact = Date(timeIntervalSince1970: 60 * 1000)
+
+        #expect(PrayerTimesCalculator.roundedUp(exact) == exact)
+        #expect(PrayerTimesCalculator.roundedDown(exact) == exact)
+    }
+}

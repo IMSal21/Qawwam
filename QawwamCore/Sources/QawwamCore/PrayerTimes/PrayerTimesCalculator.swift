@@ -26,11 +26,12 @@ public struct PrayerTimesCalculator: Sendable {
         return PrayerDay(
             date: DateComponents(year: date.year, month: date.month, day: date.day),
             times: [
-                .fajr: today.fajr, .dhuhr: today.dhuhr, .asr: today.asr,
-                .maghrib: today.maghrib, .isha: today.isha,
+                .fajr: Self.roundedUp(today.fajr), .dhuhr: Self.roundedUp(today.dhuhr),
+                .asr: Self.roundedUp(today.asr), .maghrib: Self.roundedUp(today.maghrib),
+                .isha: Self.roundedUp(today.isha),
             ],
-            sunrise: today.sunrise,
-            nextFajr: tomorrow.fajr
+            sunrise: Self.roundedDown(today.sunrise),
+            nextFajr: Self.roundedUp(tomorrow.fajr)
         )
     }
 
@@ -50,6 +51,7 @@ public struct PrayerTimesCalculator: Sendable {
         var params = CalculationMethod.ummAlQura.params
         params.madhab = settings.madhab == .hanafi ? .hanafi : .shafi
         params.highLatitudeRule = .recommended(for: coordinates)
+        params.rounding = .none
         params.adjustments = PrayerAdjustments(
             fajr: settings.adjustment(for: .fajr),
             dhuhr: settings.adjustment(for: .dhuhr),
@@ -65,6 +67,16 @@ public struct PrayerTimesCalculator: Sendable {
             throw PrayerTimesError.unavailable(date)
         }
         return times
+    }
+
+    /// The official Umm al-Qura timetable rounds on the side of caution: a prayer's start up to the
+    /// next minute, and sunrise (the end of Fajr) down. Matching it keeps us within a minute of it.
+    static func roundedUp(_ date: Date) -> Date {
+        Date(timeIntervalSince1970: (date.timeIntervalSince1970 / 60).rounded(.up) * 60)
+    }
+
+    static func roundedDown(_ date: Date) -> Date {
+        Date(timeIntervalSince1970: (date.timeIntervalSince1970 / 60).rounded(.down) * 60)
     }
 
     static func isRamadan(_ date: DateComponents, in timeZone: TimeZone) -> Bool {

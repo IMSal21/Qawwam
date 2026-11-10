@@ -1,7 +1,7 @@
 # Spec: localization
 
 Module from [CAPABILITY-MAP.md](CAPABILITY-MAP.md). Depends on: nothing (it names things from `prayer-times`, `prayer-log`, `scoring` and `world`).
-Status: **draft, awaiting Meshari's approval**
+Status: **draft, answers recorded, awaiting Meshari's approval**
 
 ## Assumptions
 
@@ -27,7 +27,7 @@ Make the app read naturally in Arabic first: correct prayer names, the Hijri dat
 | Maghrib | المغرب | Maghrib |
 | Isha | العشاء | Isha |
 
-On Fridays Dhuhr is shown as **الجمعة** (Jumu'ah). See question 3.
+On Fridays Dhuhr is shown as **الجمعة** (Jumu'ah), at the same time (decision 3).
 
 **Prayer statuses**
 
@@ -36,25 +36,25 @@ On Fridays Dhuhr is shown as **الجمعة** (Jumu'ah). See question 3.
 | upcoming | قادمة | Upcoming |
 | due | حان وقتها | Time to pray |
 | prayed on time | في وقتها | On time |
-| prayed late | قضاء | Late |
+| prayed late | متأخرة | Late |
 | missed | فائتة | Missed |
 
 **Dates**
 
-- The Hijri date is the main date, from the Umm al-Qura calendar: **١٢ رجب ١٤٤٧ هـ** in Arabic, **12 Rajab 1447 AH** in English.
-- The Gregorian date is shown small next to it: **١ يناير ٢٠٢٦م** in Arabic, **1 January 2026** in English.
+- The Hijri date is the main date, from the Umm al-Qura calendar: **12 رجب 1447 هـ** in Arabic, **12 Rajab 1447 AH** in English.
+- The Gregorian date is shown small next to it: **1 يناير 2026م** in Arabic, **1 January 2026** in English.
 - Hijri month names: محرم، صفر، ربيع الأول، ربيع الآخر، جمادى الأولى، جمادى الآخرة، رجب، شعبان، رمضان، شوال، ذو القعدة، ذو الحجة.
 - Weekdays start on Sunday: الأحد … السبت.
 
-**Times:** 12-hour clock with ص and م in Arabic (**٥:٢٠ ص**), and AM and PM in English (**5:20 AM**). Always Asia/Riyadh.
+**Times:** 12-hour clock with ص and م in Arabic (**5:20 ص**), and AM and PM in English (**5:20 AM**). Always Asia/Riyadh.
 
-**Numbers:** see question 1. Points, streaks and levels use the same digits as everything else, with plurals handled correctly in Arabic (يوم واحد، يومان، ٣ أيام، ١١ يومًا).
+**Numbers:** Western digits (123) in both languages (decision 1). Points, streaks and levels use the same digits as everything else, with plurals handled correctly in Arabic (يوم واحد، يومان، 3 أيام، 11 يومًا).
 
 **Badges and buildings**
 
 | Badge | Arabic | Building | Arabic |
 |---|---|---|---|
-| 3 days | ٣ أيام | Well | البئر |
+| 3 days | 3 أيام | Well | البئر |
 | 7 days | أسبوع | Farmhouse | البيت النجدي |
 | 30 days | شهر | Courtyard | الفناء |
 | 40 days | أربعون يومًا | Gate | البوابة |
@@ -70,12 +70,12 @@ public struct Words: Sendable {
     public func name(of prayer: Prayer, on day: DayKey) -> String   // الجمعة on Fridays
     public var sunrise: String { get }
     public func status(_ status: PrayerStatus) -> String
-    public func hijri(_ date: HijriDate) -> String                  // ١٢ رجب ١٤٤٧ هـ
-    public func gregorian(_ day: DayKey) -> String                 // ١ يناير ٢٠٢٦م
+    public func hijri(_ date: HijriDate) -> String                  // 12 رجب 1447 هـ
+    public func gregorian(_ day: DayKey) -> String                 // 1 يناير 2026م
     public func weekday(_ day: DayKey) -> String
-    public func time(_ instant: Date) -> String                    // ٥:٢٠ ص
+    public func time(_ instant: Date) -> String                    // 5:20 ص
     public func number(_ value: Int) -> String
-    public func days(_ count: Int) -> String                       // ١١ يومًا
+    public func days(_ count: Int) -> String                       // 11 يومًا
     public func points(_ count: Int) -> String
     public func level(_ level: Int) -> String
     public func badge(_ days: Int) -> String
@@ -93,13 +93,13 @@ Same as the other modules: `swift test --package-path QawwamCore`, `swift format
 - Dates: Hijri and Gregorian for several days, including the first of Ramadan 1448 and a day in Dhu al-Hijjah, checked against the official Riyadh 2027 export.
 - Times: Fajr in the morning, Isha at night, midnight and noon, in both languages.
 - Arabic plurals for 0, 1, 2, 3, 10, 11, 100 and 101 days.
-- Every Arabic string contains no Latin letters, and every English string contains no Arabic letters.
+- Every Arabic string contains no Latin letters, and every English string contains no Arabic letters. Digits are Western in both.
 
 ## Boundaries
 
 - **Always:** Arabic first; Umm al-Qura for Hijri dates; Asia/Riyadh for times.
-- **Ask first:** changing any religious term (prayer names, قضاء, الجمعة).
-- **Never:** build sentences by joining translated fragments in English word order; show Latin digits inside Arabic text if Arabic-Indic digits are chosen.
+- **Ask first:** changing any religious term (prayer names, متأخرة, الجمعة).
+- **Never:** build sentences by joining translated fragments in English word order.
 
 ## Success Criteria
 
@@ -107,8 +107,10 @@ Same as the other modules: `swift test --package-path QawwamCore`, `swift format
 - [ ] Dates match the official Umm al-Qura calendar.
 - [ ] `swift test` and lint pass in CI.
 
-## Open Questions
+## Decisions
 
-1. **Digits in Arabic:** Arabic-Indic (**١٢٣**) or Western (**123**)? Proposed: **Arabic-Indic by default, with a setting to switch to Western**. Many Saudi apps use Western digits, so the setting matters.
-2. **"Late" in Arabic:** proposed **قضاء**. It's the standard term, but strictly it means making up a prayer after its time. The softer alternative is **متأخرة** ("late").
-3. **Friday:** show Dhuhr as **الجمعة** on Fridays? Proposed: **yes**. Its time stays the same as Dhuhr.
+Meshari, 2026-11-10:
+
+1. **Digits:** Western digits (123) everywhere, in Arabic too.
+2. **Late prayer:** متأخرة.
+3. **Friday:** Dhuhr shows as الجمعة, at the same time.

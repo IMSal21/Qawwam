@@ -21,7 +21,8 @@ let package = Package(
         ),
         .testTarget(
             name: "QawwamCoreTests",
-            dependencies: ["QawwamCore"]
+            dependencies: ["QawwamCore"],
+            resources: [.copy("Fixtures")]
         ),
     ]
 )

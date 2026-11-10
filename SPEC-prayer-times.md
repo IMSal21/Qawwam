@@ -119,7 +119,7 @@ public func timing(of prayer: Prayer, loggedAt: Date) -> PrayerTiming {
 ## Testing Strategy
 
 - **Golden-file tests:** reference times from the official Umm al-Qura calendar for 6 Saudi cities × 4 dates (both solstices, an equinox, a day in Ramadan), stored as JSON fixtures with their source. Cities: Riyadh, Makkah, Madinah, Dammam, Abha, Tabuk. Every computed time must be within 1 minute of the reference.
-- **Unit tests:** window boundaries (exactly at start counts as on time, exactly at end counts as late), the after-midnight Isha case, adjustments, Ramadan Isha, country defaults, a non-Saudi location with a manually chosen method.
+- **Unit tests:** window boundaries (exactly at start counts as on time, exactly at end counts as late), the after-midnight Isha case, adjustments, Ramadan Isha, the Umm al-Qura default, a non-Saudi location with a manually chosen method.
 - **Coverage:** every public function has tests; aim for 90%+ line coverage on this module.
 - Tests fail first, then pass (test-driven-development).
 

@@ -59,3 +59,46 @@ public struct PrayerLog: Equatable, Sendable {
         guard now < day.nextFajr else { throw PrayerLogError.dayClosed }
     }
 }
+
+/// The saved form: `{"version": 1, "days": {"2026-11-10": {"fajr": {...}}}}`.
+/// Days and prayers are named in plain text so the file stays readable.
+extension PrayerLog: Codable {
+    static let formatVersion = 1
+
+    private enum CodingKeys: String, CodingKey {
+        case version, days
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let version = try container.decode(Int.self, forKey: .version)
+        guard version == Self.formatVersion else {
+            throw DecodingError.dataCorruptedError(
+                forKey: .version, in: container, debugDescription: "Unsupported prayer log version \(version)")
+        }
+        let saved = try container.decode([String: [String: PrayerEntry]].self, forKey: .days)
+        for (dayText, entries) in saved {
+            guard let key = DayKey(dayText) else {
+                throw DecodingError.dataCorruptedError(
+                    forKey: .days, in: container, debugDescription: "Not a yyyy-MM-dd date: \(dayText)")
+            }
+            for (name, entry) in entries {
+                guard let prayer = Prayer.allCases.first(where: { "\($0)" == name }) else {
+                    throw DecodingError.dataCorruptedError(
+                        forKey: .days, in: container, debugDescription: "Unknown prayer: \(name)")
+                }
+                days[key, default: [:]][prayer] = entry
+            }
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(Self.formatVersion, forKey: .version)
+        var saved: [String: [String: PrayerEntry]] = [:]
+        for (key, entries) in days {
+            saved[key.description] = Dictionary(uniqueKeysWithValues: entries.map { ("\($0.key)", $0.value) })
+        }
+        try container.encode(saved, forKey: .days)
+    }
+}

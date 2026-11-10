@@ -1,7 +1,7 @@
 # Spec: prayer-times
 
 Module from [CAPABILITY-MAP.md](CAPABILITY-MAP.md). Depends on: nothing.
-Status: **draft, awaiting Meshari's approval**
+Status: **approved by Meshari, 2026-11-10**
 
 ## Assumptions
 

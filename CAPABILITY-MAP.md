@@ -9,8 +9,8 @@ module below gets its own spec (`SPEC-<module-id>.md`) once this map is approved
 ## Assumptions
 
 1. Native iOS app in SwiftUI, minimum iOS 17, dependencies through Swift Package Manager.
-2. No backend and no account in the MVP. All data stays on the device (SwiftData in an App Group container shared with widgets).
-3. The world is a garden until the farm-or-city decision is made. `world` is written so the theme is swappable art plus names.
+2. No backend and no account in the MVP. All data stays on the device (a JSON file in an App Group container shared with widgets, see SPEC-prayer-log.md).
+3. The world is a **farm**, possibly with Islamic building styles (Meshari, 2026-11-10). `world` still keeps the theme as swappable art plus names.
 4. Prayer times are in the MVP only to judge "on time" vs "late". Notifications come in v1.1.
 5. Arabic is the default language with right-to-left layout; English is secondary.
 6. Point values and streak rules are the ones in the plan doc (all five prayed keeps the streak, late counts, a missed day resets to zero, no exemptions).
@@ -49,6 +49,5 @@ works is Linux with no Swift toolchain, so every module's tests need one of:
 
 ## Open questions
 
-- Farm or city?
 - Art source: illustrator, asset pack, or AI drafts cleaned up by a designer?
 - OK to add GitHub Actions macOS CI to the repo? (macOS minutes cost 10x Linux minutes on private repos.)

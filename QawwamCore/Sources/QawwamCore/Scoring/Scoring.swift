@@ -57,9 +57,18 @@ public enum Scoring {
         let total = dayScores.reduce(0) { $0 + $1.points } + streak.bonus
         let fajr = walkFajrStreak(log, days: started, at: now)
         return Score(
-            totalPoints: total, level: 1, currentStreak: streak.current, bestStreak: streak.best,
+            totalPoints: total, level: level(forPoints: total), currentStreak: streak.current, bestStreak: streak.best,
             currentFajrStreak: fajr.current, bestFajrStreak: fajr.best, badges: streak.badges, days: dayScores
         )
+    }
+
+    /// Level *L* starts at 50 × *L* × (*L* − 1) points: level 2 at 100, level 3 at 300, level 4 at 600.
+    public static func level(forPoints points: Int) -> Int {
+        var level = 1
+        while 50 * (level + 1) * level <= points {
+            level += 1
+        }
+        return level
     }
 
     /// Walks the days oldest first. A complete day adds one, a closed incomplete day or a missing date resets

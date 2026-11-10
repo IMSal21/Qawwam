@@ -38,6 +38,23 @@ public struct PrayerLog: Equatable, Sendable {
             timing: timing, loggedAt: now, inCongregation: inCongregation)
     }
 
+    /// Switches a logged prayer between on time and late, for when the user prayed in time but logged it later.
+    public mutating func setTiming(_ timing: PrayerTiming, for prayer: Prayer, in day: PrayerDay, at now: Date) throws {
+        try requireOpen(day, at: now)
+        guard entry(for: prayer, in: day) != nil else { throw PrayerLogError.notLogged }
+        days[DayKey(day)]?[prayer]?.timing = timing
+    }
+
+    /// Removes a logged prayer, so it is due again.
+    public mutating func unmark(_ prayer: Prayer, in day: PrayerDay, at now: Date) throws {
+        try requireOpen(day, at: now)
+        let key = DayKey(day)
+        guard days[key]?.removeValue(forKey: prayer) != nil else { throw PrayerLogError.notLogged }
+        if days[key]?.isEmpty == true {
+            days[key] = nil
+        }
+    }
+
     private func requireOpen(_ day: PrayerDay, at now: Date) throws {
         guard now < day.nextFajr else { throw PrayerLogError.dayClosed }
     }

@@ -28,7 +28,8 @@ extension FarmBuilder {
         let latest = score.days.last
         let todayKey = latest.flatMap { $0.isClosed ? nil : $0.day }
         let latestDay = latest.flatMap { key in days.first { DayKey($0) == key.day } }
-        let segments = latestDay.map { ring(log, for: $0, at: now) } ?? Array(repeating: RingSegment.upcoming, count: 5)
+        let noDay = Array(repeating: RingSegment.upcoming, count: Prayer.allCases.count)
+        let segments = latestDay.map { ring(log, for: $0, at: now) } ?? noDay
         return Farm(
             scores: Dictionary(score.days.map { ($0.day, $0) }, uniquingKeysWith: { first, _ in first }),
             firstDay: score.days.first?.day,

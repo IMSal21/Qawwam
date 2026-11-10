@@ -38,6 +38,35 @@ public struct Words: Sendable {
         }
     }
 
+    /// Western digits in both languages, with thousands grouped by commas.
+    public func number(_ value: Int) -> String {
+        let digits = String(value.magnitude)
+        var grouped = ""
+        for (index, digit) in digits.enumerated() {
+            if index > 0 && (digits.count - index) % 3 == 0 { grouped.append(",") }
+            grouped.append(digit)
+        }
+        return value < 0 ? "-" + grouped : grouped
+    }
+
+    public func days(_ count: Int) -> String {
+        switch language {
+        case .arabic: ArabicCountedNoun.day.counted(count, digits: number(count))
+        case .english: "\(number(count)) \(count == 1 ? "day" : "days")"
+        }
+    }
+
+    public func points(_ count: Int) -> String {
+        switch language {
+        case .arabic: ArabicCountedNoun.point.counted(count, digits: number(count))
+        case .english: "\(number(count)) \(count == 1 ? "point" : "points")"
+        }
+    }
+
+    public func level(_ level: Int) -> String {
+        pick("المستوى \(number(level))", "Level \(number(level))")
+    }
+
     func pick(_ arabic: String, _ english: String) -> String {
         language == .arabic ? arabic : english
     }

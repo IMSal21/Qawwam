@@ -103,9 +103,9 @@ Same as the other modules: `swift test --package-path QawwamCore`, `swift format
 
 ## Success Criteria
 
-- [ ] Every word and format above has a passing test in both languages.
-- [ ] Dates match the official Umm al-Qura calendar.
-- [ ] `swift test` and lint pass in CI.
+- [x] Every word and format above has a passing test in both languages.
+- [x] Dates match the official Umm al-Qura calendar.
+- [x] `swift test` and lint pass in CI.
 
 ## Decisions
 

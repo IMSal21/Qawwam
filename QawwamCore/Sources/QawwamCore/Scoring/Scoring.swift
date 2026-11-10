@@ -62,11 +62,8 @@ public enum Scoring {
 
     private static func startedDays(_ days: [PrayerDay], at now: Date) -> [PrayerDay] {
         var seen = Set<DayKey>()
-        return
-            days
-            .filter { now >= $0.time(of: .fajr) }
-            .sorted { DayKey($0) < DayKey($1) }
-            .filter { seen.insert(DayKey($0)).inserted }
+        let sorted = days.filter { now >= $0.time(of: .fajr) }.sorted { DayKey($0) < DayKey($1) }
+        return sorted.filter { seen.insert(DayKey($0)).inserted }
     }
 
     private static func dayScore(_ log: PrayerLog, for day: PrayerDay, at now: Date, rules: ScoringRules) -> DayScore {

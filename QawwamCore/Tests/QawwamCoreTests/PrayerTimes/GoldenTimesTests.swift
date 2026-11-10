@@ -67,6 +67,7 @@ private func minutesAfterMidnight(_ date: Date) -> Int {
 
         let calculator = PrayerTimesCalculator(settings: .ummAlQura)
         var mismatches: [String] = []
+        var histogram: [String: [Int: Int]] = [:]
         for row in reference {
             let day = try calculator.day(row.date, at: Self.riyadh, in: saudi)
             let computed = [
@@ -75,6 +76,7 @@ private func minutesAfterMidnight(_ date: Date) -> Int {
             ]
             for column in columns {
                 let difference = minutesAfterMidnight(computed[column]!) - row.minutes[column]!
+                histogram[column, default: [:]][difference, default: 0] += 1
                 if abs(difference) > 1 {
                     let sign = difference > 0 ? "+" : ""
                     mismatches.append("\(row.date.month!)/\(row.date.day!) \(column) \(sign)\(difference)m")
@@ -82,7 +84,15 @@ private func minutesAfterMidnight(_ date: Date) -> Int {
             }
         }
 
-        #expect(mismatches.isEmpty, "\(mismatches.count) mismatches: \(mismatches.prefix(60).joined(separator: ", "))")
+        let spread = columns.map { column in
+            let counts = histogram[column, default: [:]].sorted { $0.key < $1.key }
+            return "\(column) " + counts.map { "\($0.key)m×\($0.value)" }.joined(separator: " ")
+        }
+        let listed = mismatches.prefix(60).joined(separator: ", ")
+        #expect(
+            mismatches.isEmpty,
+            "\(mismatches.count) mismatches: \(listed). Spread: \(spread.joined(separator: "; "))"
+        )
     }
 
     @Test func ramadanDetectionMatchesTheOfficialHijriCalendar() throws {

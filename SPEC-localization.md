@@ -1,7 +1,7 @@
 # Spec: localization
 
 Module from [CAPABILITY-MAP.md](CAPABILITY-MAP.md). Depends on: nothing (it names things from `prayer-times`, `prayer-log`, `scoring` and `world`).
-Status: **draft, answers recorded, awaiting Meshari's approval**
+Status: **approved by Meshari, 2026-11-10**
 
 ## Assumptions
 

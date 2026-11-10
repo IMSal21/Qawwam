@@ -54,10 +54,32 @@ public enum Scoring {
         let started = startedDays(days, at: now)
         let dayScores = started.map { dayScore(log, for: $0, at: now, rules: rules) }
         let total = dayScores.reduce(0) { $0 + $1.points }
+        let streak = walkStreak(dayScores)
         return Score(
-            totalPoints: total, level: 1, currentStreak: 0, bestStreak: 0,
+            totalPoints: total, level: 1, currentStreak: streak.current, bestStreak: streak.best,
             currentFajrStreak: 0, bestFajrStreak: 0, badges: [], days: dayScores
         )
+    }
+
+    /// Walks the days oldest first. A complete day adds one, a closed incomplete day or a missing date resets
+    /// to zero, and today, while still open and unfinished, leaves the streak as it is.
+    private static func walkStreak(_ days: [DayScore]) -> (current: Int, best: Int) {
+        var current = 0
+        var best = 0
+        var previous: DayKey?
+        for day in days {
+            if let previous, previous.next != day.day {
+                current = 0
+            }
+            if day.isComplete {
+                current += 1
+                best = max(best, current)
+            } else if day.isClosed {
+                current = 0
+            }
+            previous = day.day
+        }
+        return (current, best)
     }
 
     private static func startedDays(_ days: [PrayerDay], at now: Date) -> [PrayerDay] {
@@ -79,5 +101,17 @@ public enum Scoring {
             isComplete: onTime + late == Prayer.allCases.count,
             isClosed: now >= day.nextFajr
         )
+    }
+}
+
+extension DayKey {
+    /// The calendar day after this one.
+    var next: DayKey {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "UTC")!
+        let date = calendar.date(from: DateComponents(year: year, month: month, day: day))!
+        let tomorrow = calendar.date(byAdding: .day, value: 1, to: date)!
+        let following = calendar.dateComponents([.year, .month, .day], from: tomorrow)
+        return DayKey(year: following.year!, month: following.month!, day: following.day!)
     }
 }

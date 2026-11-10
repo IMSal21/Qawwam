@@ -53,20 +53,25 @@ public enum Scoring {
     ) -> Score {
         let started = startedDays(days, at: now)
         let dayScores = started.map { dayScore(log, for: $0, at: now, rules: rules) }
-        let total = dayScores.reduce(0) { $0 + $1.points }
-        let streak = walkStreak(dayScores)
+        let streak = walkStreak(dayScores, rules: rules)
+        let total = dayScores.reduce(0) { $0 + $1.points } + streak.bonus
         let fajr = walkFajrStreak(log, days: started, at: now)
         return Score(
             totalPoints: total, level: 1, currentStreak: streak.current, bestStreak: streak.best,
-            currentFajrStreak: fajr.current, bestFajrStreak: fajr.best, badges: [], days: dayScores
+            currentFajrStreak: fajr.current, bestFajrStreak: fajr.best, badges: streak.badges, days: dayScores
         )
     }
 
     /// Walks the days oldest first. A complete day adds one, a closed incomplete day or a missing date resets
-    /// to zero, and today, while still open and unfinished, leaves the streak as it is.
-    private static func walkStreak(_ days: [DayScore]) -> (current: Int, best: Int) {
+    /// to zero, and today, while still open and unfinished, leaves the streak as it is. Each time the streak
+    /// reaches a bonus length its bonus is added; badges are the badge lengths ever reached.
+    private static func walkStreak(
+        _ days: [DayScore], rules: ScoringRules
+    ) -> (current: Int, best: Int, bonus: Int, badges: [Int]) {
         var current = 0
         var best = 0
+        var bonus = 0
+        var badges = Set<Int>()
         var previous: DayKey?
         for day in days {
             if let previous, previous.next != day.day {
@@ -75,12 +80,16 @@ public enum Scoring {
             if day.isComplete {
                 current += 1
                 best = max(best, current)
+                bonus += rules.streakBonuses[current] ?? 0
+                if rules.badgeStreaks.contains(current) {
+                    badges.insert(current)
+                }
             } else if day.isClosed {
                 current = 0
             }
             previous = day.day
         }
-        return (current, best)
+        return (current, best, bonus, badges.sorted())
     }
 
     /// Days in a row with Fajr prayed on time. Today's Fajr breaks it only once sunrise has passed

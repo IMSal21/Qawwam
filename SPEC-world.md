@@ -1,7 +1,7 @@
 # Spec: world
 
 Module from [CAPABILITY-MAP.md](CAPABILITY-MAP.md). Depends on: `prayer-log`, `scoring` (and `prayer-times` for `PrayerDay`).
-Status: **draft, awaiting Meshari's approval**
+Status: **approved by Meshari, 2026-11-10**
 
 ## Assumptions
 
@@ -19,7 +19,7 @@ Make every logged prayer visibly grow something, the way Forest grows a tree whi
 
 **One plot per prayer day**, with one plant growing in five stages:
 
-| Prayed so far | Stage | Looks like (proposed: a date palm, see question 1) |
+| Prayed so far | Stage | Looks like (a date palm, decision 1) |
 |---|---|---|
 | 0 | empty | Bare soil, ready to plant |
 | 1 | stage 1 | Seed planted |
@@ -39,6 +39,7 @@ The stage is the number of prayers prayed that day, on time or late, in any orde
 | fruiting | All five prayed on time: the palm carries dates |
 | wilted | The day closed with a prayer missed. The plant stays at its stage, wilted |
 | future | A day that hasn't started yet (empty plots in the week and month views) |
+| unused | A day before the user's first day: bare soil, never wilted, because it doesn't count against them |
 
 Undo and "I prayed it on time" change the plot straight away, because everything is worked out from the log.
 
@@ -46,10 +47,10 @@ Undo and "I prayed it on time" change the plot straight away, because everything
 
 - **Today:** today's plot, its stage and state, and how many prayers are left.
 - **Week:** seven plots from Sunday to Saturday, today marked, plus the current streak (medium widget).
-- **Month:** every day of the month as a plot, in calendar order (large widget and the farm screen). See question 2.
+- **Month:** every day of the **Hijri month** (Umm al-Qura) as a plot, in calendar order (large widget and the farm screen). Each plot also carries its Gregorian date, shown small for reference only (decision 2).
 - **Ring:** five segments for today, each prayed on time, prayed late, due, upcoming or missed (lock screen widget and the today screen).
 
-**Buildings (proposed, see question 3):** the badges from scoring unlock buildings in Islamic styles that stay on the farm for good:
+**Buildings (decision 3):** the badges from scoring unlock buildings in Islamic styles that stay on the farm for good:
 
 | Badge | Building |
 |---|---|
@@ -62,10 +63,13 @@ Undo and "I prayed it on time" change the plot straight away, because everything
 ## Interface (draft)
 
 ```swift
-public enum PlotState: Equatable, Sendable { case growing, grown, fruiting, wilted, future }
+public enum PlotState: Equatable, Sendable { case growing, grown, fruiting, wilted, future, unused }
+
+public struct HijriDate: Equatable, Sendable { public let year, month, day: Int }
 
 public struct Plot: Equatable, Sendable {
-    public let day: DayKey
+    public let day: DayKey            // Gregorian, shown small
+    public let hijri: HijriDate       // the main date
     public let stage: Int             // 0...5
     public let state: PlotState
     public let isToday: Bool
@@ -80,7 +84,7 @@ public struct Farm: Equatable, Sendable {
     public let today: Plot?
     public let ring: [RingSegment]                      // five, Fajr first
     public func week(containing day: DayKey) -> [Plot]  // Sunday to Saturday
-    public func month(containing day: DayKey) -> [Plot]
+    public func month(containing day: DayKey) -> [Plot] // the Hijri month
     public let buildings: [Building]                    // in the order unlocked
 }
 
@@ -96,7 +100,7 @@ Same as the other modules: `swift test --package-path QawwamCore`, `swift format
 ## Testing Strategy
 
 - Unit tests on hand-built days and logs, test-first: every row of the stage and state tables, and undo and timing changes.
-- Week and month layout: Sunday start, today marked, future days, a month that starts mid-week, and months of 29, 30 and 31 days.
+- Week and month layout: Sunday start, today marked, future days, a Hijri month that starts mid-week, Hijri months of 29 and 30 days checked against the Umm al-Qura calendar, and Ramadan 1448 as one month.
 - Buildings: each one unlocks exactly at its badge and stays after the streak resets.
 - Every art name a plot can produce is in one list, so the artist knows exactly which images to draw.
 
@@ -112,8 +116,10 @@ Same as the other modules: `swift test --package-path QawwamCore`, `swift format
 - [ ] The full list of art names is generated from the code and matches what plots can produce.
 - [ ] `swift test` and lint pass in CI.
 
-## Open Questions
+## Decisions
 
-1. **The plant:** proposed **a date palm** (نخلة), with dates as the fruit on a perfect day. It fits a Saudi farm. Alternatives: wheat, an olive tree, or a mix of crops.
-2. **Month view:** proposed **the Hijri month** (Umm al-Qura), so Ramadan is one whole farm, with the Gregorian date shown small. The alternative is the Gregorian month.
-3. **Buildings from badges:** proposed **yes**, using the table above. They give the farm Islamic architecture and make the badges visible. The alternative is to keep buildings for the v1.2 shop.
+Meshari, 2026-11-10:
+
+1. **The plant** is a date palm (نخلة), with dates as the fruit on a perfect day.
+2. **The month view follows the Hijri month.** The Gregorian date is shown for reference only.
+3. **Badges unlock buildings in Islamic styles**, as in the table above.

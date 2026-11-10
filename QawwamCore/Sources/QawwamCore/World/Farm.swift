@@ -59,6 +59,18 @@ public struct Farm: Equatable, Sendable {
         return (0..<7).map { plot(for: sunday.adding(days: $0), position: PlotPosition(row: 0, column: $0)) }
     }
 
+    /// Every day of the Umm al-Qura month around `day`, in order. Rows are weeks of the month and columns
+    /// are weekdays, Sunday first, like a calendar page.
+    public func month(containing day: DayKey) -> [Plot] {
+        let first = day.adding(days: 1 - HijriDate(day).day)
+        let length = HijriDate.ummAlQura.range(of: .day, in: .month, for: day.noon)!.count
+        let firstColumn = first.weekdayIndex
+        return (0..<length).map { offset in
+            let cell = firstColumn + offset
+            return plot(for: first.adding(days: offset), position: PlotPosition(row: cell / 7, column: cell % 7))
+        }
+    }
+
     func plot(for key: DayKey, position: PlotPosition) -> Plot {
         let hijri = HijriDate(key)
         let isToday = key == todayKey

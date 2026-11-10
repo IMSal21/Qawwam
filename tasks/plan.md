@@ -1,7 +1,7 @@
 # Implementation Plan: prayer-times
 
 Spec: [SPEC-prayer-times.md](../SPEC-prayer-times.md) (approved 2026-11-10)
-Status: **draft, awaiting Meshari's approval**
+Status: **approved by Meshari, 2026-11-10**
 
 ## Overview
 

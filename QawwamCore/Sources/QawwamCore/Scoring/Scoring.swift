@@ -55,9 +55,10 @@ public enum Scoring {
         let dayScores = started.map { dayScore(log, for: $0, at: now, rules: rules) }
         let total = dayScores.reduce(0) { $0 + $1.points }
         let streak = walkStreak(dayScores)
+        let fajr = walkFajrStreak(log, days: started, at: now)
         return Score(
             totalPoints: total, level: 1, currentStreak: streak.current, bestStreak: streak.best,
-            currentFajrStreak: 0, bestFajrStreak: 0, badges: [], days: dayScores
+            currentFajrStreak: fajr.current, bestFajrStreak: fajr.best, badges: [], days: dayScores
         )
     }
 
@@ -78,6 +79,28 @@ public enum Scoring {
                 current = 0
             }
             previous = day.day
+        }
+        return (current, best)
+    }
+
+    /// Days in a row with Fajr prayed on time. Today's Fajr breaks it only once sunrise has passed
+    /// without an on-time log.
+    private static func walkFajrStreak(_ log: PrayerLog, days: [PrayerDay], at now: Date) -> (current: Int, best: Int) {
+        var current = 0
+        var best = 0
+        var previous: DayKey?
+        for day in days {
+            let key = DayKey(day)
+            if let previous, previous.next != key {
+                current = 0
+            }
+            if log.status(of: .fajr, in: day, at: now) == .prayed(.onTime) {
+                current += 1
+                best = max(best, current)
+            } else if now >= day.sunrise {
+                current = 0
+            }
+            previous = key
         }
         return (current, best)
     }

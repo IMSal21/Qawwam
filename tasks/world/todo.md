@@ -24,7 +24,7 @@ Each task: tests first (pushed red), then the code (green). Verify with `swift t
 - [ ] CI green; every stage and state has a passing test
 
 ## Task 4: The Hijri month
-- [ ] Every day of the Umm al-Qura month containing the given day, in order, each with its Hijri and Gregorian date
+- [ ] Every day of the Umm al-Qura month containing the given day, in order, each with its Hijri and Gregorian date and a farm position (row = week of the month, column = weekday), for the 3D scene
 - [ ] Month starts and lengths match the official Riyadh 2027 export; Ramadan 1448 is one month
 - Files: `Farm.swift`, `Sources/QawwamCore/World/HijriDate.swift`, `Tests/QawwamCoreTests/World/MonthTests.swift`
 - Depends on: 3

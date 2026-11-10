@@ -10,6 +10,7 @@ Build the farm's logic from [SPEC-world.md](../../SPEC-world.md). `FarmBuilder.f
 - **Days outside the history.** Days after today are `future`, and days before the user's first day are `unused` (bare soil, never wilted). The first day is the oldest prayer day passed in.
 - **Hijri months use Foundation's Umm al-Qura calendar** (`Calendar(identifier: .islamicUmmAlQura)`), already used and verified on Linux by `prayer-times`. Month lengths are checked against the official Riyadh 2027 export's Hijri column, which is already in the test fixtures.
 - **Art names** follow one pattern, `palm.stage<N>` plus `.fruit` or `.wilted`, with `soil` for an empty plot. `Plot.allArtNames` lists every name the code can produce, so the artist has an exact list.
+- **3D and interactive farm** (Meshari, 2026-11-10): this module stays renderer-free. Each plot gets a grid position and an asset name that names a 3D model in the app and a still image in widgets, so the 3D scene and the widgets read the same data.
 - **Buildings** map one to one onto `Score.badges`, in unlock order.
 
 ## Task List

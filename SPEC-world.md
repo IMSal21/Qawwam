@@ -6,9 +6,9 @@ Status: **approved by Meshari, 2026-11-10**
 ## Assumptions
 
 1. The world is a **farm**, possibly with Islamic building styles (Meshari, 2026-11-10).
-2. This module is the farm's **logic only**: what every plot and building should look like. It returns plain values and art names. Drawing them with SwiftUI happens in the app and widgets, which need a Mac. The logic is pure Swift in `QawwamCore`, tested on Linux in CI like the other modules.
+2. This module is the farm's **logic only**: what every plot and building should look like. It returns plain values and asset names. Drawing happens in the app and widgets, which need a Mac. Meshari wants the farm screen **3D and interactive, like Forest** (2026-11-10): the app renders it in 3D (RealityKit or SceneKit) from the same plot data. Widgets can't run 3D, so they show still renders of the same assets. The logic is pure Swift in `QawwamCore`, tested on Linux in CI like the other modules.
 3. Nothing is stored. The farm is worked out from the prayer log and the score every time, so it always matches them.
-4. The art isn't drawn yet. Art names are stable keys (for example `palm.stage3`), so placeholder images can be swapped for the final art without code changes.
+4. The art isn't made yet. Asset names are stable keys (for example `palm.stage3`) that name a 3D model in the app and a still image in widgets, so placeholders can be swapped for the final art without code changes.
 5. The week starts on Sunday, as in Saudi Arabia.
 
 ## Objective
@@ -67,12 +67,15 @@ public enum PlotState: Equatable, Sendable { case growing, grown, fruiting, wilt
 
 public struct HijriDate: Equatable, Sendable { public let year, month, day: Int }
 
+public struct PlotPosition: Equatable, Sendable { public let row, column: Int }
+
 public struct Plot: Equatable, Sendable {
     public let day: DayKey            // Gregorian, shown small
     public let hijri: HijriDate       // the main date
     public let stage: Int             // 0...5
     public let state: PlotState
     public let isToday: Bool
+    public let position: PlotPosition // row and column on the farm, so the 3D scene can place it
     public var artName: String        // e.g. "palm.stage3", "palm.stage5.fruit", "palm.stage2.wilted", "soil"
 }
 

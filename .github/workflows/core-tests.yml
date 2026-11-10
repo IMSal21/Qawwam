@@ -11,5 +11,7 @@ jobs:
     container: swift:6.0
     steps:
       - uses: actions/checkout@v4
+      - name: Lint
+        run: swift format lint --recursive --strict --configuration QawwamCore/.swift-format QawwamCore
       - name: Run QawwamCore tests
         run: swift test --package-path QawwamCore

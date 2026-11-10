@@ -76,7 +76,8 @@ private func minutesAfterMidnight(_ date: Date) -> Int {
             for column in columns {
                 let difference = minutesAfterMidnight(computed[column]!) - row.minutes[column]!
                 if abs(difference) > 1 {
-                    mismatches.append("\(row.date.month!)/\(row.date.day!) \(column) \(difference > 0 ? "+" : "")\(difference)m")
+                    let sign = difference > 0 ? "+" : ""
+                    mismatches.append("\(row.date.month!)/\(row.date.day!) \(column) \(sign)\(difference)m")
                 }
             }
         }

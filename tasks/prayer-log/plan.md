@@ -22,10 +22,10 @@ See [todo.md](todo.md).
 2. Prayer status (S)
 3. Mark a prayer as prayed (S)
 4. Change timing and undo (S)
-5. Checkpoint
-6. Save and load the log as a file (S)
-7. Real Riyadh day, Isha after midnight (XS)
-8. Checkpoint: complete
+   - Checkpoint: rules done
+5. Save and load the log as a file (S)
+6. Real Riyadh day, Isha after midnight (XS)
+   - Checkpoint: complete
 
 ## Risks and Mitigations
 

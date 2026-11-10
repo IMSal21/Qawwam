@@ -32,14 +32,14 @@ Each task: tests first (pushed red), then the code (green). Verify with `swift t
 - [ ] CI green; every status row and logging rule has a passing test
 - [ ] Meshari sees the progress
 
-## Task 6: Save and load the log as a file
+## Task 5: Save and load the log as a file
 - [ ] Save then load gives an identical log, with several days and both timings
 - [ ] A missing file loads as an empty log; a corrupt file throws and leaves the file untouched
 - [ ] Writes are atomic
 - Files: `Sources/QawwamCore/PrayerLog/FilePrayerLogStore.swift`, `Tests/QawwamCoreTests/PrayerLog/FilePrayerLogStoreTests.swift`
 - Depends on: 1
 
-## Task 7: Real Riyadh day, Isha after midnight
+## Task 6: Real Riyadh day, Isha after midnight
 - [ ] With real Riyadh times, Isha logged at 00:30 the next calendar day lands in the previous prayer day, on time, and the day is still open until Fajr
 - Files: `Tests/QawwamCoreTests/PrayerLog/PrayerLogRiyadhTests.swift`
 - Depends on: 3

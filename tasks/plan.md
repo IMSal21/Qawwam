@@ -1,7 +1,7 @@
 # Implementation Plan: prayer-times
 
 Spec: [SPEC-prayer-times.md](../SPEC-prayer-times.md) (approved 2026-11-10)
-Status: **approved by Meshari, 2026-11-10**
+Status: **approved by Meshari, 2026-11-10; built in PR #7 except the other 12 regions' fixtures**
 
 ## Overview
 
@@ -19,23 +19,23 @@ Build the `prayer-times` module inside a new local Swift package, `QawwamCore`: 
 
 ### Phase 1: Foundation
 
-- [ ] Task 1: Package skeleton and CI
-- [ ] Task 2: Prayer and settings types
-- [ ] Task 3: Daily times with Ramadan Isha
+- [x] Task 1: Package skeleton and CI
+- [x] Task 2: Prayer and settings types
+- [x] Task 3: Daily times with Ramadan Isha
 
 ### Checkpoint: Foundation
-- [ ] CI green on Linux
-- [ ] Riyadh times for one date match Umm al-Qura within 1 minute
+- [x] CI green on Linux
+- [x] Riyadh times match Umm al-Qura within 1 minute (all of 2027)
 
 ### Phase 2: Windows and judging
 
-- [ ] Task 4: Prayer windows and on time / late
-- [ ] Task 5: Prayer day containing any instant (after-midnight Isha)
+- [x] Task 4: Prayer windows and on time / late
+- [x] Task 5: Prayer day containing any instant (after-midnight Isha)
 
 ### Phase 3: Proof against the official calendar
 
-- [ ] Task 6: Golden fixtures for 13 regions × 4 dates
-- [ ] Task 7: Edge cases and lint in CI
+- [ ] Task 6: Golden fixtures for 13 regions × 4 dates (Riyadh done: all 365 days of 2027 within 1 minute; 12 regions to go)
+- [x] Task 7: Edge cases and lint in CI
 
 ### Checkpoint: Complete
 - [ ] All 52 golden checks pass within 1 minute

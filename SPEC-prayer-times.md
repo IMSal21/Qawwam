@@ -17,7 +17,7 @@ Give the rest of the app one reliable answer to two questions: *when is each pra
 **User-facing outcomes**
 
 - A user in Riyadh sees the same times as the Umm al-Qura calendar, within 1 minute.
-- Every user gets Umm al-Qura times by default, and can change the method in settings if they live abroad.
+- A user in any of Saudi Arabia's 13 regions gets correct Umm al-Qura times for their city.
 - A user can nudge any prayer by whole minutes to match their mosque.
 - Logging Asr at 4:10 PM when Asr is 3:20 PM and Maghrib is 5:30 PM counts as on time; logging it at 6:00 PM counts as late.
 
@@ -35,7 +35,9 @@ Give the rest of the app one reliable answer to two questions: *when is each pra
 
 **Prayer day:** runs from one Fajr to the next. A prayer logged after midnight but before Fajr belongs to the previous day. The day "closes" at the next Fajr; `prayer-log` uses this to turn blanks into missed.
 
-**Calculation method:** Umm al-Qura for every user, since Qawwam is a Saudi app built on Saudi-approved sources. Other methods stay available in settings for users abroad, but nothing is picked by country.
+**Coverage (for now): all 13 regions of Saudi Arabia.** Calculation works from coordinates, so any place in the Kingdom gets exact times. The city list the user picks from lives in `app-shell`, and it must include cities from all 13 regions: Riyadh, Makkah, Madinah, Eastern Province, Qassim, Asir, Tabuk, Hail, Northern Borders, Jazan, Najran, Al-Bahah and Al-Jawf. All times use Asia/Riyadh.
+
+**Calculation method:** Umm al-Qura only, since Qawwam is a Saudi app built on Saudi-approved sources. The method stays a field in the settings type so other countries can be added later, but there's no method picker in the MVP.
 
 **Other settings**
 
@@ -118,8 +120,8 @@ public func timing(of prayer: Prayer, loggedAt: Date) -> PrayerTiming {
 
 ## Testing Strategy
 
-- **Golden-file tests:** reference times from the official Umm al-Qura calendar for 6 Saudi cities × 4 dates (both solstices, an equinox, a day in Ramadan), stored as JSON fixtures with their source. Cities: Riyadh, Makkah, Madinah, Dammam, Abha, Tabuk. Every computed time must be within 1 minute of the reference.
-- **Unit tests:** window boundaries (exactly at start counts as on time, exactly at end counts as late), the after-midnight Isha case, adjustments, Ramadan Isha, the Umm al-Qura default, a non-Saudi location with a manually chosen method.
+- **Golden-file tests:** reference times from the official Umm al-Qura calendar for one main city in each of the 13 regions × 4 dates (both solstices, an equinox, a day in Ramadan), stored as JSON fixtures with their source. Cities: Riyadh, Makkah, Madinah, Dammam, Buraydah, Abha, Tabuk, Hail, Arar, Jazan, Najran, Al-Bahah, Sakaka. Every computed time must be within 1 minute of the reference.
+- **Unit tests:** window boundaries (exactly at start counts as on time, exactly at end counts as late), the after-midnight Isha case, adjustments, Ramadan Isha, the Umm al-Qura default, the northernmost and southernmost points of the Kingdom.
 - **Coverage:** every public function has tests; aim for 90%+ line coverage on this module.
 - Tests fail first, then pass (test-driven-development).
 
@@ -131,11 +133,11 @@ public func timing(of prayer: Prayer, loggedAt: Date) -> PrayerTiming {
 
 ## Success Criteria
 
-- [ ] All golden-file tests pass within 1 minute for all 24 city-date pairs.
+- [ ] All golden-file tests pass within 1 minute for all 52 city-date pairs.
 - [ ] Window and timing rules behave exactly as in the table above, boundaries included.
 - [ ] The default settings are Umm al-Qura with standard Asr.
 - [ ] `swift test` and `swift format lint` pass.
 
 ## Decisions
 
-- 2026-11-10, Meshari: Umm al-Qura is the default for everyone; Saudi-approved sources only; tests run on Linux, since no Mac is available.
+- 2026-11-10, Meshari: Umm al-Qura is the default for everyone; Saudi-approved sources only; tests run on Linux, since no Mac is available; the app covers every region of Saudi Arabia for now.

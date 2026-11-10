@@ -96,9 +96,9 @@ Same as the other modules: `swift test --package-path QawwamCore`, `swift format
 
 ## Success Criteria
 
-- [ ] Every rule above has a passing test.
-- [ ] Undo and timing changes always give the same totals as if the log had been that way from the start.
-- [ ] `swift test` and lint pass in CI.
+- [x] Every rule above has a passing test.
+- [x] Undo and timing changes always give the same totals as if the log had been that way from the start.
+- [x] `swift test` and lint pass in CI.
 
 ## Decisions
 

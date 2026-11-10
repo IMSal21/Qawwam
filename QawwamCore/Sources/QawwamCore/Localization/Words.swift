@@ -89,7 +89,8 @@ public struct Words: Sendable {
     /// 12-hour clock in Riyadh time: "5:20 ص" / "5:20 AM".
     public func time(_ instant: Date) -> String {
         let parts = Self.riyadhCalendar.dateComponents([.hour, .minute], from: instant)
-        let hour = parts.hour!, minute = parts.minute!
+        let hour = parts.hour!
+        let minute = parts.minute!
         let clock = "\(hour % 12 == 0 ? 12 : hour % 12):\(minute < 10 ? "0" : "")\(minute)"
         let morning = hour < 12
         return "\(clock) " + pick(morning ? "ص" : "م", morning ? "AM" : "PM")

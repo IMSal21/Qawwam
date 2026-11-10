@@ -1,7 +1,7 @@
 # Spec: scoring
 
 Module from [CAPABILITY-MAP.md](CAPABILITY-MAP.md). Depends on: `prayer-log` (and `prayer-times` for `PrayerDay`).
-Status: **draft, awaiting Meshari's approval**
+Status: **approved by Meshari, 2026-11-10**
 
 ## Assumptions
 
@@ -38,9 +38,9 @@ Give the user a score that rewards praying all five on time without punishing la
 - A closed day that isn't complete (any prayer missed) resets the streak to zero. A day the user never opened the app also counts as missed.
 - The best streak ever is also kept, for the profile.
 
-**Fajr streak:** a separate, harder streak. It counts days in a row with Fajr prayed **on time** (before sunrise). Today's Fajr doesn't break it until sunrise passes without an on-time log, and switching it to on time later the same day restores it. See open question 2.
+**Fajr streak:** a separate, harder streak. It counts days in a row with Fajr prayed **on time** (before sunrise). Today's Fajr doesn't break it until sunrise passes without an on-time log, and switching it to on time later the same day restores it. See decision 2 below.
 
-**Level:** worked out from total points. See open question 3.
+**Level:** worked out from total points (decision 3 below).
 
 **Badges:** earned once, the first time the streak reaches 3, 7, 30, 40 and 100 days. A badge stays even after the streak resets.
 
@@ -100,8 +100,10 @@ Same as the other modules: `swift test --package-path QawwamCore`, `swift format
 - [ ] Undo and timing changes always give the same totals as if the log had been that way from the start.
 - [ ] `swift test` and lint pass in CI.
 
-## Open Questions
+## Decisions
 
-1. **Streak bonus after a reset:** if the streak resets and later reaches 7 again, is the +50 earned again? Proposed: **yes**, every time a streak reaches 7, 30, 40 or 100, so coming back is rewarded. Badges are still earned only once.
-2. **Fajr streak:** does Fajr need to be on time (before sunrise) to count? Proposed: **yes, on time only**. That's what makes it the harder streak.
-3. **Level:** proposed **level 2 at 100 points, and each next level needs 100 more than the last** (level 3 at 300, level 4 at 600, level 5 at 1,000). A perfect day earns 75, so early levels come within days and later ones take weeks.
+Meshari, 2026-11-10, took all three proposals:
+
+1. **Streak bonus after a reset:** earned again every time a streak reaches 7, 30, 40 or 100. Badges are earned only once.
+2. **Fajr streak:** Fajr must be prayed on time (before sunrise) to count.
+3. **Level:** level 2 at 100 points, and each next level needs 100 more than the last (level 3 at 300, level 4 at 600, level 5 at 1,000). Level *L* starts at 50 × *L* × (*L* − 1) points.

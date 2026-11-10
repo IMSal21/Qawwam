@@ -20,3 +20,57 @@ public enum FarmBuilder {
         }
     }
 }
+
+extension FarmBuilder {
+    /// The farm for `days` (every prayer day from the user's first day up to the one containing `now`).
+    public static func farm(_ log: PrayerLog, days: [PrayerDay], at now: Date) -> Farm {
+        let score = Scoring.score(log, days: days, at: now)
+        let latest = score.days.last
+        let todayKey = latest.flatMap { $0.isClosed ? nil : $0.day }
+        let latestDay = latest.flatMap { key in days.first { DayKey($0) == key.day } }
+        let ring = latestDay.map { ring(log, for: $0, at: now) } ?? Array(repeating: .upcoming, count: 5)
+        return Farm(
+            scores: Dictionary(score.days.map { ($0.day, $0) }, uniquingKeysWith: { first, _ in first }),
+            firstDay: score.days.first?.day,
+            lastDay: latest?.day,
+            todayKey: todayKey,
+            ring: ring
+        )
+    }
+}
+
+/// Everything the farm screen and the widgets draw.
+public struct Farm: Equatable, Sendable {
+    let scores: [DayKey: DayScore]
+    let firstDay: DayKey?
+    let lastDay: DayKey?
+    let todayKey: DayKey?
+    /// Five segments for today, Fajr first.
+    public let ring: [RingSegment]
+
+    /// Today's plot, while today is still open.
+    public var today: Plot? {
+        todayKey.map { plot(for: $0, position: PlotPosition(row: 0, column: $0.weekdayIndex)) }
+    }
+
+    /// Seven plots from Sunday to Saturday around `day`.
+    public func week(containing day: DayKey) -> [Plot] {
+        let sunday = day.adding(days: -day.weekdayIndex)
+        return (0..<7).map { plot(for: sunday.adding(days: $0), position: PlotPosition(row: 0, column: $0)) }
+    }
+
+    func plot(for key: DayKey, position: PlotPosition) -> Plot {
+        let hijri = HijriDate(key)
+        let isToday = key == todayKey
+        if let score = scores[key] {
+            return Plot(score: score, hijri: hijri, isToday: isToday, position: position)
+        }
+        let state: PlotState
+        if let firstDay, let lastDay {
+            state = key < firstDay ? .unused : key > lastDay ? .future : .wilted
+        } else {
+            state = .future
+        }
+        return Plot(day: key, hijri: hijri, stage: 0, state: state, isToday: isToday, position: position)
+    }
+}

@@ -54,8 +54,9 @@ private func riyadhInstant(_ month: Int, _ day: Int, _ hour: Int, _ minute: Int)
         let calculator = PrayerTimesCalculator(settings: .ummAlQura)
         let gregorian = Calendar(identifier: .gregorian)
         let start = gregorian.date(from: DateComponents(year: 2027, month: 1, day: 1, hour: 12))!
-        let dates = (0..<51).map {
-            gregorian.dateComponents([.year, .month, .day], from: gregorian.date(byAdding: .day, value: $0, to: start)!)
+        let dates = (0..<51).map { offset in
+            let noon = gregorian.date(byAdding: .day, value: offset, to: start)!
+            return gregorian.dateComponents([.year, .month, .day], from: noon)
         }
         let days = try dates.map { try calculator.day($0, at: riyadh, in: riyadhTime) }
         var log = PrayerLog()

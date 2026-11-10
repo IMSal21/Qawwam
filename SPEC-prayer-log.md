@@ -101,9 +101,9 @@ Same as `SPEC-prayer-times.md`: `swift test --package-path QawwamCore`, `swift f
 
 ## Success Criteria
 
-- [ ] Every row of the status table and every logging rule has a passing test.
-- [ ] Saved logs load back identically; corrupt files raise an error.
-- [ ] `swift test` and lint pass in CI.
+- [x] Every row of the status table and every logging rule has a passing test.
+- [x] Saved logs load back identically; corrupt files raise an error.
+- [x] `swift test` and lint pass in CI.
 
 ## Decisions
 

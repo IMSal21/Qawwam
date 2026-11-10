@@ -73,6 +73,13 @@ public struct Plot: Equatable, Sendable {
             position: position)
     }
 
+    /// Every name `artName` can return.
+    public static let allArtNames: [String] =
+        ["soil", "soil.dry"]
+        + (1...5).map { "palm.stage\($0)" }
+        + ["palm.stage5.fruit"]
+        + (1...4).map { "palm.stage\($0).wilted" }
+
     /// The 3D model in the app, or the still image in widgets, for this plot.
     public var artName: String {
         switch state {

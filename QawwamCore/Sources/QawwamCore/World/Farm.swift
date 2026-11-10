@@ -34,7 +34,8 @@ extension FarmBuilder {
             firstDay: score.days.first?.day,
             lastDay: latest?.day,
             todayKey: todayKey,
-            ring: segments
+            ring: segments,
+            buildings: Building.unlocked(by: score.badges)
         )
     }
 }
@@ -47,6 +48,8 @@ public struct Farm: Equatable, Sendable {
     let todayKey: DayKey?
     /// Five segments for today, Fajr first.
     public let ring: [RingSegment]
+    /// Buildings unlocked by streak badges, in unlock order.
+    public let buildings: [Building]
 
     /// Today's plot, while today is still open.
     public var today: Plot? {
@@ -84,5 +87,12 @@ public struct Farm: Equatable, Sendable {
             state = .future
         }
         return Plot(day: key, hijri: hijri, stage: 0, state: state, isToday: isToday, position: position)
+    }
+}
+
+/// Every asset name the farm can ask for, so the artist knows exactly what to make.
+public enum FarmArt {
+    public static var allNames: [String] {
+        Plot.allArtNames + Building.allCases.map(\.artName)
     }
 }

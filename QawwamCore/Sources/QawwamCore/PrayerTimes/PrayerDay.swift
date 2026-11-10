@@ -19,4 +19,23 @@ public struct PrayerDay: Equatable, Sendable {
     public func time(of prayer: Prayer) -> Date {
         times[prayer]!
     }
+
+    /// When `prayer` counts as on time: from its start until the next boundary
+    /// (sunrise for Fajr, the next day's Fajr for Isha). The end is exclusive.
+    public func window(for prayer: Prayer) -> DateInterval {
+        let end: Date =
+            switch prayer {
+            case .fajr: sunrise
+            case .dhuhr: time(of: .asr)
+            case .asr: time(of: .maghrib)
+            case .maghrib: time(of: .isha)
+            case .isha: nextFajr
+            }
+        return DateInterval(start: time(of: prayer), end: end)
+    }
+
+    public func timing(of prayer: Prayer, loggedAt: Date) -> PrayerTiming {
+        let window = window(for: prayer)
+        return window.start <= loggedAt && loggedAt < window.end ? .onTime : .late
+    }
 }

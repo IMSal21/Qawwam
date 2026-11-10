@@ -34,6 +34,17 @@ public struct PrayerTimesCalculator: Sendable {
         )
     }
 
+    /// The prayer day `instant` falls in. Before Fajr, that is the previous day's.
+    public func prayerDay(containing instant: Date, at point: GeoPoint, in timeZone: TimeZone) throws -> PrayerDay {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timeZone
+        let today = try day(calendar.dateComponents([.year, .month, .day], from: instant), at: point, in: timeZone)
+        guard instant < today.time(of: .fajr) else { return today }
+
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: instant)!
+        return try day(calendar.dateComponents([.year, .month, .day], from: yesterday), at: point, in: timeZone)
+    }
+
     private func adhanTimes(_ date: DateComponents, at point: GeoPoint, in timeZone: TimeZone) throws -> PrayerTimes {
         let coordinates = Coordinates(latitude: point.latitude, longitude: point.longitude)
         var params = CalculationMethod.ummAlQura.params

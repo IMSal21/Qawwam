@@ -105,11 +105,9 @@ Same as `SPEC-prayer-times.md`: `swift test --package-path QawwamCore`, `swift f
 - [ ] Saved logs load back identically; corrupt files raise an error.
 - [ ] `swift test` and lint pass in CI.
 
-## Open Questions
-
-1. **What happens if a prayer is logged after its own time ends?** Meshari (2026-11-10): the user needs to log before the prayer time ends, since logging will be a quick notification or widget tap. Still to settle on the decision card: does a log after its time count as **late** (fewer points, streak survives) or as **missed** (streak resets)? Either way a closed day can't be fixed.
-
 ## Decisions
+
+1. **Logged after its own time ends:** it counts as **late** (fewer points, the streak survives). Meshari, 2026-11-10: "he logs it as late". A prayer still not logged when the next Fajr begins is missed, and the day can't be fixed after that.
 
 2. **"I prayed it on time" changes:** yes, while the day is open (honour system). Meshari, 2026-11-10.
 3. **Congregation flag in the MVP:** yes. Meshari, 2026-11-10.

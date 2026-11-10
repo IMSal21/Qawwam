@@ -67,6 +67,42 @@ public struct Words: Sendable {
         pick("المستوى \(number(level))", "Level \(number(level))")
     }
 
+    /// The main date: "12 رجب 1447 هـ" / "12 Rajab 1447 AH".
+    public func hijri(_ date: HijriDate) -> String {
+        let month = pick(Self.arabicHijriMonths[date.month - 1], Self.englishHijriMonths[date.month - 1])
+        return pick(
+            "\(number(date.day)) \(month) \(date.year) هـ", "\(number(date.day)) \(month) \(date.year) AH")
+    }
+
+    /// The reference date: "1 يناير 2026م" / "1 January 2026".
+    public func gregorian(_ day: DayKey) -> String {
+        let month = pick(Self.arabicGregorianMonths[day.month - 1], Self.englishGregorianMonths[day.month - 1])
+        return pick("\(number(day.day)) \(month) \(day.year)م", "\(number(day.day)) \(month) \(day.year)")
+    }
+
+    public func weekday(_ day: DayKey) -> String {
+        pick(Self.arabicWeekdays[day.weekdayIndex], Self.englishWeekdays[day.weekdayIndex])
+    }
+
+    static let arabicHijriMonths = [
+        "محرم", "صفر", "ربيع الأول", "ربيع الآخر", "جمادى الأولى", "جمادى الآخرة", "رجب", "شعبان", "رمضان",
+        "شوال", "ذو القعدة", "ذو الحجة",
+    ]
+    static let englishHijriMonths = [
+        "Muharram", "Safar", "Rabi' al-Awwal", "Rabi' al-Akhir", "Jumada al-Ula", "Jumada al-Akhirah", "Rajab",
+        "Sha'ban", "Ramadan", "Shawwal", "Dhu al-Qa'dah", "Dhu al-Hijjah",
+    ]
+    static let arabicGregorianMonths = [
+        "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر",
+        "ديسمبر",
+    ]
+    static let englishGregorianMonths = [
+        "January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+        "November", "December",
+    ]
+    static let arabicWeekdays = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"]
+    static let englishWeekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
     func pick(_ arabic: String, _ english: String) -> String {
         language == .arabic ? arabic : english
     }

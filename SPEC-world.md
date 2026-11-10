@@ -115,9 +115,9 @@ Same as the other modules: `swift test --package-path QawwamCore`, `swift format
 
 ## Success Criteria
 
-- [ ] Every stage, state, ring segment and building rule has a passing test.
-- [ ] The full list of art names is generated from the code and matches what plots can produce.
-- [ ] `swift test` and lint pass in CI.
+- [x] Every stage, state, ring segment and building rule has a passing test.
+- [x] The full list of art names is generated from the code and matches what plots can produce.
+- [x] `swift test` and lint pass in CI.
 
 ## Decisions
 

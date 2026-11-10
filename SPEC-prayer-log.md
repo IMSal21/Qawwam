@@ -107,7 +107,10 @@ Same as `SPEC-prayer-times.md`: `swift test --package-path QawwamCore`, `swift f
 
 ## Open Questions
 
-1. **Can a closed day be fixed?** For example, "I prayed Isha but forgot to log it." Proposed: **no**, the day is final at Fajr, which matches the strict streak. The alternative is a grace period, e.g. until the next Dhuhr.
-2. **"I prayed it on time" changes:** proposed **yes**, while the day is open (honour system).
-3. **Congregation flag in the MVP:** proposed **yes**. It's one switch and enables the Fajr-in-congregation badge.
-4. **JSON file instead of SwiftData:** proposed **yes**. It's simpler, testable here, and widgets can read it. It can move to a database later if needed.
+1. **What happens if a prayer is logged after its own time ends?** Meshari (2026-11-10): the user needs to log before the prayer time ends, since logging will be a quick notification or widget tap. Still to settle on the decision card: does a log after its time count as **late** (fewer points, streak survives) or as **missed** (streak resets)? Either way a closed day can't be fixed.
+
+## Decisions
+
+2. **"I prayed it on time" changes:** yes, while the day is open (honour system). Meshari, 2026-11-10.
+3. **Congregation flag in the MVP:** yes. Meshari, 2026-11-10.
+4. **JSON file instead of SwiftData:** yes. Meshari left the choice to us on 2026-11-10; a JSON file is simpler, testable on Linux, and readable by widgets.

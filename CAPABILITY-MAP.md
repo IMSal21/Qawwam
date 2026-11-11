@@ -44,10 +44,9 @@ Build order: prayer-times, localization → prayer-log → scoring → world →
 iOS code can only be built and tested on macOS with Xcode. The cloud environment where Claude
 works is Linux with no Swift toolchain, so every module's tests need one of:
 
-- a GitHub Actions macOS runner running `xcodebuild test` on each push (recommended), or
+- a GitHub Actions macOS runner running `xcodebuild test` on each push (chosen: Meshari has no Mac for now; the repo is public so runners are free; see SPEC-cloud-build.md), or
 - a Remote Control session on Meshari's Mac.
 
 ## Open questions
 
 - Art source: illustrator, asset pack, or AI drafts cleaned up by a designer?
-- OK to add GitHub Actions macOS CI to the repo? (macOS minutes cost 10x Linux minutes on private repos.)

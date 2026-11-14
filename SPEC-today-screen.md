@@ -80,9 +80,9 @@ All the screen's wording and numbers come from `TodayState`, so they're unit-tes
 
 ## Success Criteria
 
-- [ ] The Arabic screenshot matches the mockup's today screen.
-- [ ] Logging, undo, late or on time, and congregation all work and are saved.
-- [ ] Unit and UI tests pass in CI on every push.
+- [ ] The Arabic screenshot matches the mockup's today screen. (waiting for Meshari's look)
+- [x] Logging, undo, late or on time, and congregation all work and are saved.
+- [x] Unit and UI tests pass in CI on every push.
 
 ## Open questions
 

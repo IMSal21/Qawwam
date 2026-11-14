@@ -1,0 +1,23 @@
+name: iOS
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: iOS app (macOS)
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Show Xcode
+        run: xcodebuild -version
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate the Xcode project
+        run: xcodegen generate
+      - name: Build for the iOS Simulator
+        run: |
+          set -o pipefail
+          xcodebuild build -project Qawwam.xcodeproj -scheme Qawwam \
+            -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO | tail -n 80

@@ -45,12 +45,12 @@ final class ScreenshotTests: XCTestCase {
     func testPrayingAsrMarksItOnTime() {
         let app = launch(language: "ar", locale: "ar_SA")
         XCTAssertTrue(app.buttons["صلّيت"].waitForExistence(timeout: 10))
-        XCTAssertEqual(app.staticTexts.matching(identifier: "في وقتها").count, 1)
+        XCTAssertEqual(app.staticTexts.matching(NSPredicate(format: "label == %@", "في وقتها")).count, 1)
 
         app.buttons["صلّيت"].tap()
 
         XCTAssertTrue(app.staticTexts["التالي: المغرب"].waitForExistence(timeout: 5))
-        XCTAssertEqual(app.staticTexts.matching(identifier: "في وقتها").count, 2)
+        XCTAssertEqual(app.staticTexts.matching(NSPredicate(format: "label == %@", "في وقتها")).count, 2)
         XCTAssertTrue(app.staticTexts["+25 نقطة اليوم"].exists)
         keepScreenshot(app, name: "today-ar-after")
     }

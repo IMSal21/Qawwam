@@ -2,7 +2,7 @@
 
 First piece of `app-shell` from [CAPABILITY-MAP.md](CAPABILITY-MAP.md). Built from the approved mockup ("اليوم · Today" on the [mockups canvas](https://claude.ai/artifact/62Hq1ss3o2dsSs1zjdPDXc)).
 Depends on: `prayer-times`, `prayer-log`, `scoring`, `world`, `localization` (all merged).
-Status: **draft, waiting for Meshari's approval**
+Status: **approved by Meshari, 2026-11-15**
 
 ## Assumptions
 
@@ -42,6 +42,8 @@ Status: **draft, waiting for Meshari's approval**
 English mirrors all of it left-to-right, using the English words from localization.
 
 ## Interface (draft)
+
+`TodayState` is pure logic, so it lives in `QawwamCore` (`Sources/QawwamCore/Today/`) and is tested on Linux with the other modules. Only `TodayStore` and the views live in the app.
 
 ```swift
 /// Everything the today screen shows, worked out from the log and the time. No UI.

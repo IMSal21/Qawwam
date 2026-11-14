@@ -26,11 +26,28 @@ jobs:
           set -o pipefail
           xcodebuild build -project Qawwam.xcodeproj -scheme Qawwam \
             -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO | tail -n 80
+      - name: Pick an iPhone simulator
+        run: |
+          device=$(xcrun simctl list devices available -j | python3 -c '
+          import json, sys
+          devices = json.load(sys.stdin)["devices"]
+          ios = sorted((runtime, d["udid"]) for runtime, list_ in devices.items() if "iOS" in runtime
+                       for d in list_ if d["name"].startswith("iPhone"))
+          print(ios[-1][1] if ios else "")')
+          if [ -z "$device" ]; then
+            runtime=$(xcrun simctl list runtimes available -j | python3 -c '
+          import json, sys
+          ios = [r["identifier"] for r in json.load(sys.stdin)["runtimes"] if r["platform"] == "iOS"]
+          print(ios[-1])')
+            device=$(xcrun simctl create "Qawwam iPhone" "iPhone 16" "$runtime")
+          fi
+          echo "Using simulator $device"
+          echo "SIMULATOR_ID=$device" >> "$GITHUB_ENV"
       - name: Test on an iPhone simulator
         run: |
           set -o pipefail
           xcodebuild test -project Qawwam.xcodeproj -scheme Qawwam \
-            -destination 'platform=iOS Simulator,name=iPhone 16' -resultBundlePath build/Results.xcresult \
+            -destination "id=$SIMULATOR_ID" -resultBundlePath build/Results.xcresult \
             CODE_SIGNING_ALLOWED=NO | tail -n 80
       - name: Export screenshots
         if: success()

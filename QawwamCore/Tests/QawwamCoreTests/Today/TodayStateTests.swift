@@ -111,7 +111,7 @@ private func mockupScene() throws -> (PrayerLog, [PrayerDay], Date) {
         #expect(state.rows[1].pillText == "لم تُسجَّل · تُحسب متأخرة")
         #expect(state.rows[1].actions == [.pray])
         #expect(state.heroTitle == "حان وقت العصر")
-        #expect(state.pointsText == "+10 نقطة اليوم")
+        #expect(state.pointsText == "+10 نقاط اليوم")
     }
 
     @Test func whenTheCurrentPrayerIsLoggedTheHeroShowsTheNextOne() throws {

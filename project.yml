@@ -19,6 +19,12 @@ targets:
     sources: [App]
     dependencies:
       - package: QawwamCore
+      - target: QawwamWidgets
+        embed: true
+    entitlements:
+      path: App/Qawwam.entitlements
+      properties:
+        com.apple.security.application-groups: [group.com.qawwam.app]
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.qawwam.app
@@ -51,3 +57,24 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.qawwam.app.uitests
         GENERATE_INFOPLIST_FILE: YES
         TEST_TARGET_NAME: Qawwam
+  QawwamWidgets:
+    type: app-extension
+    platform: iOS
+    sources: [Widgets]
+    dependencies:
+      - package: QawwamCore
+      - sdk: WidgetKit.framework
+      - sdk: SwiftUI.framework
+    info:
+      path: Widgets/Info.plist
+      properties:
+        CFBundleDisplayName: قوّام
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: Widgets/QawwamWidgets.entitlements
+      properties:
+        com.apple.security.application-groups: [group.com.qawwam.app]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.qawwam.app.widgets

@@ -2,3 +2,6 @@
 .swiftpm/
 xcuserdata/
 .DS_Store
+Qawwam.xcodeproj/
+Widgets/Info.plist
+*.entitlements

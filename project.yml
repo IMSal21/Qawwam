@@ -1,0 +1,80 @@
+name: Qawwam
+options:
+  bundleIdPrefix: com.qawwam
+  developmentLanguage: ar
+  deploymentTarget:
+    iOS: "17.0"
+packages:
+  QawwamCore:
+    path: QawwamCore
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  Qawwam:
+    type: application
+    platform: iOS
+    sources: [App]
+    dependencies:
+      - package: QawwamCore
+      - target: QawwamWidgets
+        embed: true
+    entitlements:
+      path: App/Qawwam.entitlements
+      properties:
+        com.apple.security.application-groups: [group.com.qawwam.app]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.qawwam.app
+        TARGETED_DEVICE_FAMILY: "1"
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: قوّام
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+    scheme:
+      testTargets: [AppTests, AppUITests]
+  AppTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [AppTests]
+    dependencies:
+      - target: Qawwam
+      - package: QawwamCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.qawwam.app.tests
+        GENERATE_INFOPLIST_FILE: YES
+  AppUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [AppUITests]
+    dependencies:
+      - target: Qawwam
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.qawwam.app.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: Qawwam
+  QawwamWidgets:
+    type: app-extension
+    platform: iOS
+    sources: [Widgets]
+    dependencies:
+      - package: QawwamCore
+      - sdk: WidgetKit.framework
+      - sdk: SwiftUI.framework
+    info:
+      path: Widgets/Info.plist
+      properties:
+        CFBundleDisplayName: قوّام
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: Widgets/QawwamWidgets.entitlements
+      properties:
+        com.apple.security.application-groups: [group.com.qawwam.app]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.qawwam.app.widgets

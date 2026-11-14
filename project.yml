@@ -27,4 +27,16 @@ targets:
         INFOPLIST_KEY_CFBundleDisplayName: قوّام
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
-    scheme: {}
+    scheme:
+      testTargets: [AppTests]
+  AppTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [AppTests]
+    dependencies:
+      - target: Qawwam
+      - package: QawwamCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.qawwam.app.tests
+        GENERATE_INFOPLIST_FILE: YES

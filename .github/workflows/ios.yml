@@ -21,3 +21,8 @@ jobs:
           set -o pipefail
           xcodebuild build -project Qawwam.xcodeproj -scheme Qawwam \
             -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO | tail -n 80
+      - name: Test on an iPhone simulator
+        run: |
+          set -o pipefail
+          xcodebuild test -project Qawwam.xcodeproj -scheme Qawwam \
+            -destination 'platform=iOS Simulator,name=iPhone 16' CODE_SIGNING_ALLOWED=NO | tail -n 80

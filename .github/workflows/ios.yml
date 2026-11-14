@@ -2,7 +2,12 @@ name: iOS
 
 on:
   push:
+    branches-ignore: [screenshots]
   workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   build:
@@ -25,4 +30,50 @@ jobs:
         run: |
           set -o pipefail
           xcodebuild test -project Qawwam.xcodeproj -scheme Qawwam \
-            -destination 'platform=iOS Simulator,name=iPhone 16' CODE_SIGNING_ALLOWED=NO | tail -n 80
+            -destination 'platform=iOS Simulator,name=iPhone 16' -resultBundlePath build/Results.xcresult \
+            CODE_SIGNING_ALLOWED=NO | tail -n 80
+      - name: Export screenshots
+        if: success()
+        run: |
+          mkdir -p build/attachments build/screenshots
+          xcrun xcresulttool export attachments --path build/Results.xcresult --output-path build/attachments
+          python3 - <<'PY'
+          import json, shutil
+          manifest = json.load(open("build/attachments/manifest.json"))
+          for test in manifest:
+              for item in test.get("attachments", []):
+                  name = item["suggestedHumanReadableName"].split("_")[0]
+                  shutil.copy(f"build/attachments/{item['exportedFileName']}", f"build/screenshots/{name}.png")
+          PY
+          ls -l build/screenshots
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: screenshots
+          path: build/screenshots
+      - name: Post screenshots on the pull request
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          pr=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$GITHUB_REF_NAME" --state open --json number --jq '.[0].number')
+          if [ -z "$pr" ]; then echo "No open pull request for $GITHUB_REF_NAME"; exit 0; fi
+          shots="$RUNNER_TEMP/shots"
+          git init -q "$shots" && cd "$shots"
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          if git fetch -q --depth 1 origin screenshots; then git checkout -q -b screenshots FETCH_HEAD; else git checkout -q --orphan screenshots; fi
+          mkdir -p "$GITHUB_SHA" && cp "$GITHUB_WORKSPACE"/build/screenshots/*.png "$GITHUB_SHA"/
+          git -c user.name="github-actions" -c user.email="github-actions@users.noreply.github.com" add -A
+          git -c user.name="github-actions" -c user.email="github-actions@users.noreply.github.com" \
+            commit -q -m "Screenshots for ${GITHUB_SHA}"
+          git push -q origin screenshots
+          base="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/screenshots/${GITHUB_SHA}"
+          {
+            echo "### Screenshots for ${GITHUB_SHA:0:7}"
+            echo
+            echo "| العربية | English |"
+            echo "|---|---|"
+            echo "| <img src=\"$base/today-ar.png\" width=\"280\"> | <img src=\"$base/today-en.png\" width=\"280\"> |"
+          } > "$RUNNER_TEMP/comment.md"
+          gh pr comment "$pr" --repo "$GITHUB_REPOSITORY" --edit-last --body-file "$RUNNER_TEMP/comment.md" \
+            || gh pr comment "$pr" --repo "$GITHUB_REPOSITORY" --body-file "$RUNNER_TEMP/comment.md"

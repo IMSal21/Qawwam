@@ -28,7 +28,7 @@ targets:
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
     scheme:
-      testTargets: [AppTests]
+      testTargets: [AppTests, AppUITests]
   AppTests:
     type: bundle.unit-test
     platform: iOS
@@ -40,3 +40,14 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.qawwam.app.tests
         GENERATE_INFOPLIST_FILE: YES
+  AppUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [AppUITests]
+    dependencies:
+      - target: Qawwam
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.qawwam.app.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: Qawwam

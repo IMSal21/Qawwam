@@ -5,32 +5,26 @@ import SwiftUI
 struct TodayView: View {
     let words: Words
 
-    private static let riyadh = GeoPoint(latitude: 24.7136, longitude: 46.6753)
-    private static let saudi = TimeZone(identifier: "Asia/Riyadh")!
-
     var body: some View {
         NavigationStack {
-            if let day = try? PrayerTimesCalculator(settings: .ummAlQura)
-                .prayerDay(containing: Date(), at: Self.riyadh, in: Self.saudi)
-            {
-                let key = DayKey(day)
+            if let model = try? TodayModel(words: words, now: Date()) {
                 List {
                     Section {
-                        ForEach(Prayer.allCases, id: \.self) { prayer in
+                        ForEach(model.rows, id: \.prayer) { row in
                             HStack {
-                                Text(words.name(of: prayer, on: key))
+                                Text(row.name)
                                 Spacer()
-                                Text(words.time(day.time(of: prayer))).monospacedDigit()
+                                Text(row.time).monospacedDigit()
                             }
                         }
                     } header: {
                         VStack(alignment: .leading) {
-                            Text(words.hijri(HijriDate(key))).font(.headline)
-                            Text(words.gregorian(key)).font(.caption)
+                            Text(model.hijri).font(.headline)
+                            Text(model.gregorian).font(.caption)
                         }
                     }
                 }
-                .navigationTitle(words.weekday(key))
+                .navigationTitle(model.weekday)
             } else {
                 Text("—")
             }

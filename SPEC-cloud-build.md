@@ -71,8 +71,8 @@ AppTests/  AppUITests/           # tests that need iOS
 
 ## Success Criteria
 
-- [ ] The macOS workflow builds the app and runs its tests on every push.
-- [ ] Pull requests carry Arabic and English simulator screenshots.
+- [x] The macOS workflow builds the app and runs its tests on every push.
+- [x] Pull requests carry Arabic and English simulator screenshots.
 - [ ] Later, once the account exists: a merge to main puts a new build in TestFlight, and it opens on Meshari's iPhone.
 
 ## Decisions

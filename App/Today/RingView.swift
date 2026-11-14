@@ -19,6 +19,8 @@ struct RingView: View {
         .rotationEffect(.degrees(-90))
         .scaleEffect(x: direction == .rightToLeft ? -1 : 1, y: 1)
         .padding(lineWidth / 2)
+        // Draw in a fixed direction; the flip above makes Arabic run counterclockwise from the top.
+        .environment(\.layoutDirection, .leftToRight)
     }
 
     static func color(_ segment: RingSegment) -> Color {

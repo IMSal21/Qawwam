@@ -1,8 +1,9 @@
 import XCTest
 
 /// Opens the app in each language, checks the today screen, and keeps a screenshot for the pull request.
+@MainActor
 final class ScreenshotTests: XCTestCase {
-    override func setUp() {
+    override func setUp() async throws {
         continueAfterFailure = false
     }
 

@@ -22,6 +22,7 @@ struct TodayView: View {
                             Text(model.hijri).font(.headline)
                             Text(model.gregorian).font(.caption)
                         }
+                        .textCase(nil)
                     }
                 }
                 .navigationTitle(model.weekday)

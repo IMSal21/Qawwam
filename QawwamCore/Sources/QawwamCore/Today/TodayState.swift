@@ -82,7 +82,7 @@ public struct TodayState: Equatable, Sendable {
     private static func row(
         _ prayer: Prayer, log: PrayerLog, day: PrayerDay, key: DayKey, words: Words, now: Date
     ) -> Row {
-        let name = words.name(of: prayer, on: key)
+        let name = words.name(of: prayer, in: day, log: log, at: now)
         let window = day.window(for: prayer)
         let entry = log.entry(for: prayer, in: day)
         let status = log.status(of: prayer, in: day, at: now)

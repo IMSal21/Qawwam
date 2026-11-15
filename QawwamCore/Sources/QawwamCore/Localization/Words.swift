@@ -28,6 +28,15 @@ public struct Words: Sendable {
         }
     }
 
+    /// The prayer's name on `day` at `now`. Friday's Dhuhr is Jumu'ah until its time passes without it being
+    /// prayed; after that it can only be made up as Dhuhr, so it is called Dhuhr.
+    public func name(of prayer: Prayer, in day: PrayerDay, log: PrayerLog, at now: Date) -> String {
+        if prayer == .dhuhr && Scoring.jumuahMissed(log, in: day, at: now) {
+            return pick("الظهر", "Dhuhr")
+        }
+        return name(of: prayer, on: DayKey(day))
+    }
+
     public var sunrise: String { pick("الشروق", "Sunrise") }
 
     public func status(_ status: PrayerStatus) -> String {

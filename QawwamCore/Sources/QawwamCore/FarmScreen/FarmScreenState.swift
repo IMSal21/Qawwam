@@ -75,7 +75,7 @@ public struct FarmScreenState: Equatable, Sendable {
         var chips: [Chip] = []
         if let day, plot.state != .unused, plot.state != .future {
             chips = zip(Prayer.allCases, segments).map { prayer, segment in
-                let name = words.name(of: prayer, on: plot.day)
+                let name = words.name(of: prayer, in: day, log: log, at: now)
                 let status = words.status(log.status(of: prayer, in: day, at: now))
                 return Chip(
                     prayer: prayer, name: name, segment: segment, label: words.chipLabel(name, status: status))
@@ -93,9 +93,11 @@ public struct FarmScreenState: Equatable, Sendable {
         }
 
         var prayer: Prayer?
+        var prayButtonText: String?
         if plot.isToday, let day {
             let due = Prayer.allCases.filter { log.status(of: $0, in: day, at: now) == .due }
             prayer = due.first { now < day.window(for: $0).end } ?? due.first
+            prayButtonText = prayer.map { words.prayed(words.name(of: $0, in: day, log: log, at: now)) }
         }
 
         return DayCard(
@@ -108,7 +110,7 @@ public struct FarmScreenState: Equatable, Sendable {
             statusText: statusText,
             chips: chips,
             prayer: prayer,
-            prayButtonText: prayer.map { words.prayed(words.name(of: $0, on: plot.day)) }
+            prayButtonText: prayButtonText
         )
     }
 }

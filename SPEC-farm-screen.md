@@ -18,7 +18,7 @@ Status: **draft, waiting for Meshari's approval**
 **Header**
 - "مزرعتي" as the title, with the Hijri month and year: جمادى الأولى 1448.
 - Three pills:
-  - Complete palms this month: "26 نخلة".
+  - Complete palms this month: "25 نخلة".
   - Fruiting palms: "15 مثمرة" (gold).
   - The next building: "التالي: الفناء بعد 18 يوماً". The days are the streak days still needed. Once every building is unlocked, this pill is hidden.
 

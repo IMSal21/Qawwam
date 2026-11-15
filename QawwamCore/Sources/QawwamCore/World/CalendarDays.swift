@@ -17,7 +17,7 @@ extension DayKey {
         self.init(year: parts.year!, month: parts.month!, day: parts.day!)
     }
 
-    func adding(days: Int) -> DayKey {
+    public func adding(days: Int) -> DayKey {
         DayKey(noon: Self.gregorian.date(byAdding: .day, value: days, to: noon)!)
     }
 

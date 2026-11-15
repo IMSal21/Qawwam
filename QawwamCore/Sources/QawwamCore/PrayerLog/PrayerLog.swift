@@ -46,6 +46,13 @@ public struct PrayerLog: Equatable, Sendable {
     }
 
     /// Removes a logged prayer, so it is due again.
+    /// Turns "in congregation" on or off for a prayer already logged, while its day is open.
+    public mutating func setCongregation(_ on: Bool, for prayer: Prayer, in day: PrayerDay, at now: Date) throws {
+        try requireOpen(day, at: now)
+        guard entry(for: prayer, in: day) != nil else { throw PrayerLogError.notLogged }
+        days[DayKey(day)]?[prayer]?.inCongregation = on
+    }
+
     public mutating func unmark(_ prayer: Prayer, in day: PrayerDay, at now: Date) throws {
         try requireOpen(day, at: now)
         let key = DayKey(day)

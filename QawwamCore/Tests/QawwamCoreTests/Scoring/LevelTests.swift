@@ -19,7 +19,8 @@ private typealias F = ScoringFixtures
 
         let score = Scoring.score(log, days: F.days(4), at: F.at(4, 5, 30))
 
-        #expect(score.totalPoints == 300)
+        // Four perfect days, with Jumu'ah on time on day 1 (a Friday): 40 more than Dhuhr.
+        #expect(score.totalPoints == 4 * 75 + 40)
         #expect(score.level == 3)
     }
 

@@ -27,21 +27,24 @@ Give the user a score that rewards praying all five on time without punishing la
 | Streak reaches 7, 30, 40, 100 days | +50, +100, +150, +300 bonus |
 | Missed prayer | 0, and the streak resets |
 
-**Jumu'ah (decision 4).** On Fridays, the Dhuhr prayer is Jumu'ah:
+**Jumu'ah (decision 4).** On Fridays, the Dhuhr prayer is Jumu'ah. Jumu'ah is either prayed in its time or missed. There is no late Jumu'ah: once its time has passed, the user prays Dhuhr instead.
 
 | Event | Points |
 |---|---|
 | Jumu'ah prayed on time | 50 (5 × 10) |
-| Jumu'ah prayed late | 25 (5 × 5) |
 | Jumu'ah missed, first Friday in a row | −50 |
 | Jumu'ah missed, second Friday in a row | −60 |
 | Each further Friday missed in a row | 10 more than the one before (−70, −80 …) |
+| Jumu'ah missed but prayed as Dhuhr later | the penalty above, plus 5 for a late Dhuhr |
 
-- Jumu'ah counts as missed when Friday's prayer day closes (at the next Fajr) with it still unlogged, like any missed prayer. Logging it before then counts as late, as for other prayers.
-- Praying Jumu'ah, on time or late, resets the count, so the next missed Friday is −50 again.
+- Jumu'ah counts as missed as soon as its time ends (when Asr begins) without an on-time log.
+- If the user then prays Dhuhr, it's logged as a late prayer. It earns 5 points and keeps the day complete, so the streak isn't broken, but the Jumu'ah penalty still applies.
+- If Dhuhr isn't prayed at all before the day closes, the Jumu'ah penalty applies, and the missed prayer breaks the streak as usual.
+- Only praying Jumu'ah on time resets the count, so the next missed Friday is −50 again.
 - Only Fridays from the user's first day count. A Friday the user never opened the app is missed.
+- "I prayed it on time" and undo change the result straight away, because everything is worked out from the log.
 - The total never goes below zero. Points are added up day by day, oldest first, and the running total is kept at zero or more after each day.
-- The streak rules don't change. A missed Jumu'ah is a missed prayer, so it also resets the streak.
+- Screens: on a Friday, the row is called الجمعة until its time ends. After that, a missed Jumu'ah shows as الظهر, so the user logs Dhuhr. This follows in the app after the scoring change.
 
 - Points for a prayer count as soon as it's logged, even while the day is still open. Undo removes them, and switching late to on time adds the difference.
 - The all-five-on-time bonus is added as soon as the fifth prayer is logged on time.
@@ -69,8 +72,8 @@ public struct ScoringRules: Sendable {
 
 public struct DayScore: Equatable, Sendable {
     public let day: DayKey
-    public let points: Int            // prayers (Jumu'ah × 5) plus the all-on-time bonus
-    public let jumuahPenalty: Int     // 0, or 50, 60, 70 … when Friday closed with Jumu'ah missed
+    public let points: Int            // prayers (on-time Jumu'ah × 5) plus the all-on-time bonus
+    public let jumuahPenalty: Int     // 0, or 50, 60, 70 … once Jumu'ah's time has passed without it
     public let prayedCount: Int       // 0...5
     public let onTimeCount: Int       // 0...5
     public let isComplete: Bool       // all five prayed
@@ -102,7 +105,7 @@ Same as the other modules: `swift test --package-path QawwamCore`, `swift format
 
 - Unit tests on hand-built prayer days and logs, test-first: every row of the points table, the all-on-time bonus appearing and disappearing with undo and timing changes, and each streak rule.
 - Streak edge cases: an open day that isn't finished yet, a missed day in the middle, a gap of days with no logs at all, an Isha logged after midnight.
-- Jumu'ah: on time, late, logged late after its window, missed once, missed twice and three times in a row, the count resetting after a prayed Friday, undo on Friday, and the total stopping at zero.
+- Jumu'ah: on time, missed then prayed as Dhuhr, missed with no Dhuhr, missed two and three Fridays in a row, the count resetting after an on-time Friday, switching to on time and undo on Friday, and the total stopping at zero.
 - Milestones: each streak bonus and badge exactly at 3, 7, 30, 40 and 100 days, not one day early.
 - One longer test over a real Riyadh month using `prayer-times`.
 
@@ -128,4 +131,4 @@ Meshari, 2026-11-10, took all three proposals:
 
 Meshari, 2026-11-16:
 
-4. **Jumu'ah:** 5 × the points when prayed, and when missed −5 × 10 the first time, −6 × 10 the second time, and so on. "In a row": praying a Friday resets the count. It's always on (no setting), and the total can't go below zero.
+4. **Jumu'ah:** 5 × the points when prayed on time. When missed: −5 × 10 the first time, −6 × 10 the second time, and so on, counted in a row (praying Jumu'ah resets it). There is no late Jumu'ah: after its time it's missed and prayed as Dhuhr. It's always on (no setting), and the total can't go below zero.

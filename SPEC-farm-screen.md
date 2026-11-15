@@ -101,9 +101,9 @@ Same as the today screen. Core: `swift test --package-path QawwamCore` and `swif
 
 ## Success Criteria
 
-- [ ] The Arabic screenshot matches the mockup's farm screen.
-- [ ] Turning, zooming and tapping a day work on the phone, and logging from the farm updates both screens.
-- [ ] Unit and UI tests pass in CI on every push.
+- [ ] The Arabic screenshot matches the mockup's farm screen. (waiting for Meshari's look)
+- [ ] Turning, zooming and tapping a day work on the phone, and logging from the farm updates both screens. (logging is covered by UI tests; the gestures wait for a phone)
+- [x] Unit and UI tests pass in CI on every push.
 
 ## Open questions
 

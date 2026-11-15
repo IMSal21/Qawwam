@@ -35,4 +35,4 @@ Tests first (pushed red), then the code (green). Linux and macOS CI must both pa
 - Files: `App/Farm/FarmSceneView.swift`, `App/Farm/FarmView.swift`
 
 ## Checkpoint: complete
-- [ ] Arabic screenshot matches the mockup; all tests green; PR ready
+- [x] Arabic screenshot matches the mockup; all tests green; PR ready

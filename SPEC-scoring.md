@@ -1,7 +1,7 @@
 # Spec: scoring
 
 Module from [CAPABILITY-MAP.md](CAPABILITY-MAP.md). Depends on: `prayer-log` (and `prayer-times` for `PrayerDay`).
-Status: **approved by Meshari, 2026-11-10**
+Status: **approved by Meshari, 2026-11-10**. Jumu'ah rule added 2026-11-16 (decision 4), waiting for approval.
 
 ## Assumptions
 
@@ -26,6 +26,22 @@ Give the user a score that rewards praying all five on time without punishing la
 | All five on time in one day | +25 bonus |
 | Streak reaches 7, 30, 40, 100 days | +50, +100, +150, +300 bonus |
 | Missed prayer | 0, and the streak resets |
+
+**Jumu'ah (decision 4).** On Fridays, the Dhuhr prayer is Jumu'ah:
+
+| Event | Points |
+|---|---|
+| Jumu'ah prayed on time | 50 (5 × 10) |
+| Jumu'ah prayed late | 25 (5 × 5) |
+| Jumu'ah missed, first Friday in a row | −50 |
+| Jumu'ah missed, second Friday in a row | −60 |
+| Each further Friday missed in a row | 10 more than the one before (−70, −80 …) |
+
+- Jumu'ah counts as missed when Friday's prayer day closes (at the next Fajr) with it still unlogged, like any missed prayer. Logging it before then counts as late, as for other prayers.
+- Praying Jumu'ah, on time or late, resets the count, so the next missed Friday is −50 again.
+- Only Fridays from the user's first day count. A Friday the user never opened the app is missed.
+- The total never goes below zero. Points are added up day by day, oldest first, and the running total is kept at zero or more after each day.
+- The streak rules don't change. A missed Jumu'ah is a missed prayer, so it also resets the streak.
 
 - Points for a prayer count as soon as it's logged, even while the day is still open. Undo removes them, and switching late to on time adds the difference.
 - The all-five-on-time bonus is added as soon as the fifth prayer is logged on time.
@@ -53,7 +69,8 @@ public struct ScoringRules: Sendable {
 
 public struct DayScore: Equatable, Sendable {
     public let day: DayKey
-    public let points: Int            // prayers plus the all-on-time bonus
+    public let points: Int            // prayers (Jumu'ah × 5) plus the all-on-time bonus
+    public let jumuahPenalty: Int     // 0, or 50, 60, 70 … when Friday closed with Jumu'ah missed
     public let prayedCount: Int       // 0...5
     public let onTimeCount: Int       // 0...5
     public let isComplete: Bool       // all five prayed
@@ -61,7 +78,7 @@ public struct DayScore: Equatable, Sendable {
 }
 
 public struct Score: Equatable, Sendable {
-    public let totalPoints: Int       // day points plus streak bonuses
+    public let totalPoints: Int       // day points plus streak bonuses minus Jumu'ah penalties, never below 0
     public let level: Int
     public let currentStreak: Int
     public let bestStreak: Int
@@ -85,6 +102,7 @@ Same as the other modules: `swift test --package-path QawwamCore`, `swift format
 
 - Unit tests on hand-built prayer days and logs, test-first: every row of the points table, the all-on-time bonus appearing and disappearing with undo and timing changes, and each streak rule.
 - Streak edge cases: an open day that isn't finished yet, a missed day in the middle, a gap of days with no logs at all, an Isha logged after midnight.
+- Jumu'ah: on time, late, logged late after its window, missed once, missed twice and three times in a row, the count resetting after a prayed Friday, undo on Friday, and the total stopping at zero.
 - Milestones: each streak bonus and badge exactly at 3, 7, 30, 40 and 100 days, not one day early.
 - One longer test over a real Riyadh month using `prayer-times`.
 
@@ -107,3 +125,7 @@ Meshari, 2026-11-10, took all three proposals:
 1. **Streak bonus after a reset:** earned again every time a streak reaches 7, 30, 40 or 100. Badges are earned only once.
 2. **Fajr streak:** Fajr must be prayed on time (before sunrise) to count.
 3. **Level:** level 2 at 100 points, and each next level needs 100 more than the last (level 3 at 300, level 4 at 600, level 5 at 1,000). Level *L* starts at 50 × *L* × (*L* − 1) points.
+
+Meshari, 2026-11-16:
+
+4. **Jumu'ah:** 5 × the points when prayed, and when missed −5 × 10 the first time, −6 × 10 the second time, and so on. "In a row": praying a Friday resets the count. It's always on (no setting), and the total can't go below zero.

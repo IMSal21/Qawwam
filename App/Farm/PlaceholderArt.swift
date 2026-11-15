@@ -95,11 +95,11 @@ enum PlaceholderArt {
     private static func dates(around crown: Entity, scale: Float) {
         for bunch in 0..<6 {
             let angle = Float(bunch) * .pi / 3 + 0.5
-            let x = cos(angle) * 0.13
-            let z = sin(angle) * 0.13
-            crown.addChild(box([0.016, 0.08, 0.016], UIColor(hex: 0xC99A2E), at: [x, -0.04, z]))
+            let x = cos(angle) * 0.15
+            let z = sin(angle) * 0.15
+            crown.addChild(box([0.02, 0.08, 0.02], UIColor(hex: 0xC99A2E), at: [x, -0.04, z]))
             for step in 0..<3 {
-                let size = 0.11 - Float(step) * 0.016
+                let size = 0.13 - Float(step) * 0.018
                 let color = UIColor(hex: (bunch + step) % 2 == 1 ? 0xE8892B : 0xC9461F)
                 crown.addChild(box([size, 0.07, size], color, at: [x, -0.115 - Float(step) * 0.075, z]))
             }

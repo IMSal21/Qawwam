@@ -24,6 +24,7 @@ struct FarmSceneView: View {
     @Binding var camera: FarmCamera
     let onSelect: (DayKey) -> Void
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var box = SceneBox()
     @State private var dragStart: CGSize = .zero
     @State private var zoomStart: Float?
@@ -36,6 +37,7 @@ struct FarmSceneView: View {
             scene.root.orientation = simd_quatf(angle: camera.yaw, axis: [0, 1, 0])
             content.add(scene.root)
             box.scene = scene
+            if !reduceMotion { scene.grow() }
 
             let key = DirectionalLight()
             key.light.intensity = 2600
@@ -54,10 +56,13 @@ struct FarmSceneView: View {
         } update: { content in
             guard var scene = box.scene else { return }
             if scene.signature != FarmScene.signature(plots, buildings) {
+                let before = scene.artNames
                 content.remove(scene.root)
                 scene = FarmScene(plots: plots, buildings: buildings)
                 content.add(scene.root)
                 box.scene = scene
+                let grew = Set(scene.artNames.filter { before[$0.key] != $0.value }.keys)
+                if !reduceMotion && !grew.isEmpty { scene.grow(only: grew, from: 0.55) }
             }
             scene.select(selected)
             scene.root.orientation = simd_quatf(angle: camera.yaw, axis: [0, 1, 0])
@@ -95,7 +100,7 @@ struct FarmSceneView: View {
 
     /// The camera looks at the middle of the farm from a distance set by the zoom and a height set by the tilt.
     private static func place(_ lens: PerspectiveCamera, camera: FarmCamera) {
-        let distance = 15 / camera.zoom
+        let distance = 16.5 / camera.zoom
         let target: SIMD3<Float> = [0, 0, -0.4]
         let eye = target + [0, sin(camera.pitch) * distance, cos(camera.pitch) * distance]
         lens.look(at: target, from: eye, relativeTo: nil)

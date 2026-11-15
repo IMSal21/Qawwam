@@ -10,6 +10,8 @@ final class FarmScene {
     let root = Entity()
     /// One entity per day, named `plot-<day>`, that taps can find.
     private(set) var plotEntities: [DayKey: Entity] = [:]
+    /// The art name each day shows, so a rebuild can tell which palms grew.
+    private(set) var artNames: [DayKey: String] = [:]
     private var selection: Entity?
     private var selectedDay: DayKey?
     /// What the scene was built from, so it is rebuilt only when that changes.
@@ -35,6 +37,7 @@ final class FarmScene {
             let entity = Self.plotEntity(plot)
             root.addChild(entity)
             plotEntities[plot.day] = entity
+            artNames[plot.day] = plot.artName
         }
 
         for building in buildings {
@@ -59,6 +62,22 @@ final class FarmScene {
         frame.position.y = 0.005
         plot.addChild(frame)
         selection = frame
+    }
+
+    /// Grows the palms in: all of them one after another on opening, or only those in `days`.
+    func grow(only days: Set<DayKey>? = nil, from start: Float = 0.01) {
+        let order = plotEntities.keys.sorted()
+        for (index, day) in order.enumerated() where days?.contains(day) ?? true {
+            guard let art = plotEntities[day]?.findEntity(named: "art"), !art.children.isEmpty else { continue }
+            art.scale = SIMD3(repeating: start)
+            let delay = days == nil ? 150 + index * 28 : 0
+            Task { @MainActor in
+                try? await Task.sleep(for: .milliseconds(delay))
+                var grown = art.transform
+                grown.scale = .one
+                art.move(to: grown, relativeTo: art.parent, duration: 0.52, timingFunction: .easeOut)
+            }
+        }
     }
 
     /// The day of the plot that `entity` belongs to.

@@ -168,8 +168,9 @@ private func mockupMonth() throws -> (PrayerLog, [PrayerDay], Date) {
         #expect(
             FarmScreenState.nextBuildingText(unlocked: [.well], streak: 0, words: words)
                 == "التالي: البيت النجدي بعد 7 أيام")
+        let fourBuildings: [Building] = [.well, .farmhouse, .courtyard, .gate]
         #expect(
-            FarmScreenState.nextBuildingText(unlocked: [.well, .farmhouse, .courtyard, .gate], streak: 41, words: words)
+            FarmScreenState.nextBuildingText(unlocked: fourBuildings, streak: 41, words: words)
                 == "التالي: المسجد بعد 59 يومًا")
         #expect(FarmScreenState.nextBuildingText(unlocked: Building.allCases, streak: 120, words: words) == nil)
     }

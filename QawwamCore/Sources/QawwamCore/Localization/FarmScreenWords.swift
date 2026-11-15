@@ -34,9 +34,10 @@ extension Words {
     public func nextBuilding(_ building: Building, inDays count: Int) -> String {
         switch language {
         case .arabic:
-            "التالي: \(self.building(building)) بعد \(ArabicCountedNoun.dayAfter.counted(count, digits: number(count)))"
+            let days = ArabicCountedNoun.dayAfter.counted(count, digits: number(count))
+            return "التالي: \(self.building(building)) بعد \(days)"
         case .english:
-            "Next: \(self.building(building)) in \(days(count))"
+            return "Next: \(self.building(building)) in \(days(count))"
         }
     }
 

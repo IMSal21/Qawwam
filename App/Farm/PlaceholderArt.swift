@@ -42,7 +42,8 @@ enum PlaceholderArt {
             root.addChild(box([0.16, 0.07, 0.16], UIColor(hex: 0x6B4A2E), at: [0, y0 + 0.035, 0]))
         case 2:
             root.addChild(box([0.036, 0.2, 0.036], leafB, at: [0, y0 + 0.1, 0]))
-            for (index, angle) in [Float(0.4), 0.4 + .pi].enumerated() {
+            let angles: [Float] = [0.4, 0.4 + Float.pi]
+            for (index, angle) in angles.enumerated() {
                 root.addChild(frond(length: 0.2, width: 0.07, yaw: angle, droop: -0.35,
                                     color: index == 0 ? leafA : leafB, at: [0, y0 + 0.2, 0]))
             }

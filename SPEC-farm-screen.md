@@ -2,7 +2,7 @@
 
 Second piece of `app-shell` from [CAPABILITY-MAP.md](CAPABILITY-MAP.md). Built from the approved mockup ("المزرعة · Farm" on the [mockups canvas](https://claude.ai/artifact/62Hq1ss3o2dsSs1zjdPDXc)).
 Depends on: `world`, `scoring`, `prayer-log`, `localization`, and the today screen's `TodayStore` (all merged).
-Status: **draft, waiting for Meshari's approval**
+Status: **approved by Meshari, 2026-11-15**
 
 ## Assumptions
 

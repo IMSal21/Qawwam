@@ -1,7 +1,7 @@
 import QawwamCore
 import SwiftUI
 
-/// The tab bar: today, farm, profile. Farm and profile are placeholders until their own specs.
+/// The tab bar: today, farm, profile. Profile is a placeholder until its own spec.
 struct RootView: View {
     let store: TodayStore
     @Environment(\.scenePhase) private var scenePhase
@@ -12,7 +12,7 @@ struct RootView: View {
         TabView {
             TodayView(store: store)
                 .tabItem { Label(words.today, systemImage: "checkmark.circle") }
-            Placeholder(title: words.farm, words: words)
+            FarmView(store: store)
                 .tabItem { Label(words.farm, systemImage: "leaf") }
             Placeholder(title: words.profile, words: words)
                 .tabItem { Label(words.profile, systemImage: "person") }

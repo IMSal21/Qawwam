@@ -91,6 +91,11 @@ jobs:
             echo "| العربية | English |"
             echo "|---|---|"
             echo "| <img src=\"$base/today-ar.png\" width=\"280\"> | <img src=\"$base/today-en.png\" width=\"280\"> |"
+            for screen in farm; do
+              if [ -f "$GITHUB_WORKSPACE/build/screenshots/$screen-ar.png" ]; then
+                echo "| <img src=\"$base/$screen-ar.png\" width=\"280\"> | <img src=\"$base/$screen-en.png\" width=\"280\"> |"
+              fi
+            done
           } > "$RUNNER_TEMP/comment.md"
           gh pr comment "$pr" --repo "$GITHUB_REPOSITORY" --edit-last --body-file "$RUNNER_TEMP/comment.md" \
             || gh pr comment "$pr" --repo "$GITHUB_REPOSITORY" --body-file "$RUNNER_TEMP/comment.md"

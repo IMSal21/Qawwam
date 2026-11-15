@@ -21,6 +21,11 @@ enum Theme {
     static let line = Color(hex: 0xE2DED3)
     static let upcomingSoft = Color(hex: 0xECE9E1)
     static let upcomingRow = Color(hex: 0xF8F7F2)
+    static let farmSky = Color(hex: 0xE3ECE8)
+    static let fruitText = Color(hex: 0x7A3E0C)
+    static let fruitFrame = Color(hex: 0xE2B13C)
+    static let dates = Color(hex: 0xE8892B)
+    static let wiltedText = Color(hex: 0x8A3426)
 
     enum Weight { case regular, medium, semibold, bold }
 

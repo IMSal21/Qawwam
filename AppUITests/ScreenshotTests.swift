@@ -54,4 +54,48 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["+25 نقطة اليوم"].exists)
         keepScreenshot(app, name: "today-ar-after")
     }
+
+    // MARK: Farm
+
+    private func openFarm(_ app: XCUIApplication, tab: String) {
+        XCTAssertTrue(app.tabBars.buttons[tab].waitForExistence(timeout: 10))
+        app.tabBars.buttons[tab].tap()
+    }
+
+    func testFarmInArabic() {
+        let app = launch(language: "ar", locale: "ar_SA")
+        openFarm(app, tab: "المزرعة")
+        XCTAssertTrue(app.staticTexts["مزرعتي"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["25 نخلة"].exists)
+        XCTAssertTrue(app.staticTexts["15 مثمرة"].exists)
+        XCTAssertTrue(app.staticTexts["التالي: الفناء بعد 18 يومًا"].exists)
+        XCTAssertTrue(app.staticTexts["نبتة تنمو · المرحلة 2 من 5"].exists)
+        XCTAssertTrue(app.buttons["صلّيت العصر"].exists)
+        sleep(3)  // let the 3D farm render
+        keepScreenshot(app, name: "farm-ar")
+    }
+
+    func testFarmInEnglish() {
+        let app = launch(language: "en", locale: "en_SA")
+        openFarm(app, tab: "Farm")
+        XCTAssertTrue(app.staticTexts["My farm"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["25 palms"].exists)
+        XCTAssertTrue(app.buttons["Prayed Asr"].exists)
+        sleep(3)
+        keepScreenshot(app, name: "farm-en")
+    }
+
+    func testPrayingFromTheFarmGrowsTodaysPalm() {
+        let app = launch(language: "ar", locale: "ar_SA")
+        openFarm(app, tab: "المزرعة")
+        XCTAssertTrue(app.buttons["صلّيت العصر"].waitForExistence(timeout: 10))
+
+        app.buttons["صلّيت العصر"].tap()
+
+        XCTAssertTrue(app.staticTexts["نبتة تنمو · المرحلة 3 من 5"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["صلّيت العصر"].exists)
+
+        app.tabBars.buttons["اليوم"].tap()
+        XCTAssertTrue(app.staticTexts["التالي: المغرب"].waitForExistence(timeout: 5))
+    }
 }

@@ -7,7 +7,7 @@ From [SPEC-farm-screen.md](../../SPEC-farm-screen.md), approved 2026-11-15.
 - **Core first, test-first on Linux.** `FarmScreenState` works out every word and count on the screen: header pills, next building, the selected day's card, its chips and the pray button. The app only lays them out and draws.
 - **The 3D scene is a thin layer.** `PlaceholderArt` turns each art name from `world` into a small low-poly RealityKit entity. `FarmSceneView` places one per plot and building at the plot's row and column, and turns taps into a selected day. It decides nothing about how a plot looks.
 - **One shared store.** The farm reads the same `TodayStore` as the today screen, so logging on either screen updates both.
-- **The minimum goes to iOS 18** in `project.yml` and the `QawwamCore` package, for RealityKit's non-AR view and orbit camera.
+- **The app's minimum goes to iOS 18** in `project.yml`, for RealityKit's non-AR view. `QawwamCore` itself doesn't need it and stays as it is.
 - **A fuller demo scene.** The mockup's month: the user started on 4 Jumada al-Ula, day 17 has Maghrib and Isha missed, the mockup's 15 days are fruiting and the rest are complete with one prayer late. The today screen's scene stays the same: a streak of 12, with Fajr on time and Dhuhr late today.
 
 ## Order and risks

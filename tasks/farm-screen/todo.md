@@ -3,23 +3,23 @@
 Tests first (pushed red), then the code (green). Linux and macOS CI must both pass.
 
 ## Task 1: Farm words (core)
-- [ ] مزرعتي، "25 نخلة"، "15 مثمرة"، "التالي: الفناء بعد 18 يوماً" (with plurals)، the status lines, "فاتت صلاة واحدة / صلاتان / 3 صلوات"، "يوم قادم · لم يبدأ بعد"، "صلّيت العصر"، the hints and legend, the control labels; and the English words
+- [x] مزرعتي، "25 نخلة"، "15 مثمرة"، "التالي: الفناء بعد 18 يوماً" (with plurals)، the status lines, "فاتت صلاة واحدة / صلاتان / 3 صلوات"، "يوم قادم · لم يبدأ بعد"، "صلّيت العصر"، the hints and legend, the control labels; and the English words
 - Files: `Localization/FarmWords.swift`, `Tests/.../Localization/FarmWordsTests.swift`
 
 ## Task 2: FarmScreenState (core)
-- [ ] Header: month, palm and fruit counts for the Hijri month, next building and the days left, hidden after the mosque
-- [ ] Selected day card: dates, today badge, status and tone for every plot state, five chips, the pray button only while a prayer is due; today is selected by default
-- [ ] The mockup scene gives exactly the mockup's text
+- [x] Header: month, palm and fruit counts for the Hijri month, next building and the days left, hidden after the mosque
+- [x] Selected day card: dates, today badge, status and tone for every plot state, five chips, the pray button only while a prayer is due; today is selected by default
+- [x] The mockup scene gives exactly the mockup's text
 - Files: `Sources/QawwamCore/FarmScreen/FarmScreenState.swift`, `Tests/.../FarmScreen/FarmScreenStateTests.swift`
 
-## Checkpoint: core done, CI green
+## Checkpoint: core done, CI green ✓
 
 ## Task 3: The 3D scene (app)
-- [ ] iOS 18 minimum in `project.yml` and `Package.swift`
+- [ ] iOS 18 minimum for the app in `project.yml`
 - [ ] `PlaceholderArt` makes a shape for every name in `FarmArt.allNames`; an unknown name gets soil
 - [ ] `FarmSceneView`: the island, one plot entity per day, the unlocked buildings, outlines for today, fruit and the selection, drag to turn, pinch to zoom, tap to select
 - [ ] App tests: every art name gets a shape; there is one plot entity per day of the month
-- Files: `project.yml`, `QawwamCore/Package.swift`, `App/Farm/PlaceholderArt.swift`, `App/Farm/FarmSceneView.swift`, `AppTests/FarmSceneTests.swift`
+- Files: `project.yml`, `App/Farm/PlaceholderArt.swift`, `App/Farm/FarmSceneView.swift`, `AppTests/FarmSceneTests.swift`
 
 ## Checkpoint: the CI screenshot shows the island
 

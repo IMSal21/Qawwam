@@ -56,6 +56,11 @@ final class TodayStore {
         TodayState(log: log, days: days, words: words, city: words.riyadh, now: now)
     }
 
+    /// The farm screen for the current month, with `selected` (or today) on the day card.
+    func farmState(selected: DayKey?) -> FarmScreenState {
+        FarmScreenState(log: log, days: days, words: words, now: now, selected: selected)
+    }
+
     func refresh() {
         now = clock()
     }

@@ -81,8 +81,10 @@ private typealias F = ScoringFixtures
 
         let score = Scoring.score(log, days: F.days(36), at: F.at(36, 5, 30))
 
-        #expect([1, 8, 15, 22, 29].map { score.days[$0].jumuahPenalty } == [50, 60, 70, 0, 50])
-        #expect(score.days.map(\.jumuahPenalty).reduce(0, +) == 50 + 60 + 70 + 50)
+        let fridays: [Int] = [1, 8, 15, 22, 29].map { score.days[$0].jumuahPenalty }
+        #expect(fridays == [50, 60, 70, 0, 50])
+        let penalties: Int = score.days.map(\.jumuahPenalty).reduce(0, +)
+        #expect(penalties == 230)
     }
 
     @Test func switchingJumuahToOnTimeTakesThePenaltyAway() {

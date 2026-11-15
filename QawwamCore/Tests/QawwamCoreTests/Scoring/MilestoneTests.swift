@@ -5,6 +5,11 @@ import Testing
 
 private typealias F = ScoringFixtures
 
+/// Fridays among days 0 up to `count - 1` (day 0 is a Thursday). Jumu'ah on time earns 40 more than Dhuhr.
+private func fridays(_ count: Int) -> Int {
+    (count + 5) / 7
+}
+
 /// A score after `count` perfect days in a row, read just after the last day closes.
 private func scoreAfterPerfectDays(_ count: Int) -> Score {
     var log = PrayerLog()
@@ -19,7 +24,7 @@ private func scoreAfterPerfectDays(_ count: Int) -> Score {
     func streakBonusesArriveExactlyAtTheirDay(days: Int, bonusSoFar: Int) {
         let score = scoreAfterPerfectDays(days)
 
-        #expect(score.totalPoints == days * 75 + bonusSoFar)
+        #expect(score.totalPoints == days * 75 + bonusSoFar + fridays(days) * 40)
     }
 
     @Test(arguments: [
@@ -37,7 +42,7 @@ private func scoreAfterPerfectDays(_ count: Int) -> Score {
 
         let score = Scoring.score(log, days: F.days(15), at: F.at(15, 5, 30))
 
-        #expect(score.totalPoints == 14 * 75 + 2 * 50)
+        #expect(score.totalPoints == 14 * 75 + 2 * 50 + 2 * 40)
     }
 
     @Test func badgesStayAfterAReset() {
@@ -57,7 +62,7 @@ private func scoreAfterPerfectDays(_ count: Int) -> Score {
         let score = Scoring.score(log, days: F.days(7), at: F.at(6, 19, 10))
 
         #expect(score.currentStreak == 7)
-        #expect(score.totalPoints == 7 * 75 + 50)
+        #expect(score.totalPoints == 7 * 75 + 50 + 40)
     }
 
     @Test func lateDaysCountTowardsMilestonesToo() {
@@ -66,7 +71,8 @@ private func scoreAfterPerfectDays(_ count: Int) -> Score {
 
         let score = Scoring.score(log, days: F.days(7), at: F.at(7, 5, 30))
 
-        #expect(score.totalPoints == 7 * 25 + 50)
+        // Friday's late Dhuhr means Jumu'ah was missed: −50.
+        #expect(score.totalPoints == 7 * 25 + 50 - 50)
         #expect(score.badges == [3, 7])
     }
 
@@ -78,6 +84,7 @@ private func scoreAfterPerfectDays(_ count: Int) -> Score {
 
         let score = Scoring.score(log, days: F.days(2), at: F.at(1, 13))
 
-        #expect(score.totalPoints == 75 + 5 + 10)
+        // Day 1 is a Friday: Jumu'ah on time is 50.
+        #expect(score.totalPoints == 75 + 5 + 50)
     }
 }

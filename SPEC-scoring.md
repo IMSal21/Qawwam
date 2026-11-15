@@ -1,7 +1,7 @@
 # Spec: scoring
 
 Module from [CAPABILITY-MAP.md](CAPABILITY-MAP.md). Depends on: `prayer-log` (and `prayer-times` for `PrayerDay`).
-Status: **approved by Meshari, 2026-11-10**. Jumu'ah rule added 2026-11-16 (decision 4), waiting for approval.
+Status: **approved by Meshari, 2026-11-10**. Jumu'ah rule added and approved 2026-11-16 (decision 4).
 
 ## Assumptions
 

@@ -42,7 +42,8 @@ private func riyadhInstant(_ year: Int, _ month: Int, _ day: Int, _ hour: Int, _
         #expect(score.currentStreak == 11)
         #expect(score.bestStreak == 19)
         #expect(score.currentFajrStreak == 31)
-        #expect(score.totalPoints == 30 * 75 + 40 + 50 + 50)
+        // Five Fridays (1, 8, 15, 22, 29 January), each Jumu'ah on time: 40 more than Dhuhr.
+        #expect(score.totalPoints == 30 * 75 + 40 + 50 + 50 + 5 * 40)
         #expect(score.badges == [3, 7])
         #expect(score.level == 7)
     }

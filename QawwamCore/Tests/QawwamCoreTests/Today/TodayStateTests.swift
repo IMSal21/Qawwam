@@ -175,4 +175,34 @@ private func mockupScene() throws -> (PrayerLog, [PrayerDay], Date) {
         #expect(state.heroTitle == "حان وقت الفجر")
         #expect(state.rows[1].startsText == "يبدأ \(Words(.arabic).time(all[0].time(of: .dhuhr)))")
     }
+
+    @Test func afterJumuahsTimeAMissedJumuahIsCalledDhuhr() throws {
+        let friday = DayKey(year: 2026, month: 11, day: 13)
+        let all = try days(from: friday, through: friday)
+        let day = all[0]
+        let before = day.window(for: .dhuhr).end.addingTimeInterval(-60)
+        let after = day.window(for: .dhuhr).end.addingTimeInterval(60)
+        let words = Words(.arabic)
+
+        let open = TodayState(log: PrayerLog(), days: all, words: words, city: words.riyadh, now: before)
+        let missed = TodayState(log: PrayerLog(), days: all, words: words, city: words.riyadh, now: after)
+
+        #expect(open.rows[1].name == "الجمعة")
+        #expect(missed.rows[1].name == "الظهر")
+        #expect(missed.rows[1].pillText == "لم تُسجَّل · تُحسب متأخرة")
+    }
+
+    @Test func jumuahOnTimeKeepsItsNameAndFiftyPoints() throws {
+        let friday = DayKey(year: 2026, month: 11, day: 13)
+        let all = try days(from: friday, through: friday)
+        let day = all[0]
+        var log = PrayerLog()
+        try log.markPrayed(.dhuhr, in: day, at: logAt(.dhuhr, in: day, plus: 5))
+        let now = day.window(for: .dhuhr).end.addingTimeInterval(60)
+
+        let state = TodayState(log: log, days: all, words: Words(.arabic), city: "الرياض", now: now)
+
+        #expect(state.rows[1].name == "الجمعة")
+        #expect(state.pointsText == "+50 نقطة اليوم")
+    }
 }

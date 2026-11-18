@@ -2,7 +2,7 @@
 
 Third piece of `app-shell` from [CAPABILITY-MAP.md](CAPABILITY-MAP.md). Built from the approved mockups "لماذا قوّام" (OnbWhy), "المدينة" (OnbCity) and "لماذا المزرعة" (OnbFarm) on the [mockups canvas](https://claude.ai/artifact/62Hq1ss3o2dsSs1zjdPDXc).
 Depends on: `prayer-times`, `localization`, and the today and farm screens' `TodayStore` (all merged).
-Status: **draft, waiting for Meshari's approval**
+Status: **approved by Meshari, 2026-11-18**
 
 ## Assumptions
 

@@ -1,15 +1,29 @@
 import QawwamCore
 import SwiftUI
 
-/// The tab bar: today, farm, profile. Profile is a placeholder until its own spec.
+/// Onboarding on the first launch, then the tab bar: today, farm, profile. Profile is a placeholder until its own spec.
 struct RootView: View {
     let store: TodayStore
     @Environment(\.scenePhase) private var scenePhase
     private let minute = Timer.publish(every: 30, on: .main, in: .common).autoconnect()
 
     var body: some View {
+        Group {
+            if store.isOnboarded {
+                tabs
+            } else {
+                OnboardingView(store: store)
+            }
+        }
+        .onReceive(minute) { _ in store.refresh() }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { store.refresh() }
+        }
+    }
+
+    private var tabs: some View {
         let words = store.words
-        TabView {
+        return TabView {
             TodayView(store: store)
                 .tabItem { Label(words.today, systemImage: "checkmark.circle") }
             FarmView(store: store)
@@ -18,10 +32,6 @@ struct RootView: View {
                 .tabItem { Label(words.profile, systemImage: "person") }
         }
         .tint(Theme.palm)
-        .onReceive(minute) { _ in store.refresh() }
-        .onChange(of: scenePhase) { _, phase in
-            if phase == .active { store.refresh() }
-        }
     }
 }
 

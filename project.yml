@@ -33,6 +33,7 @@ targets:
         INFOPLIST_KEY_CFBundleDisplayName: قوّام
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: نستخدم موقعك لنختار أقرب مدينة لحساب مواقيت الصلاة.
     scheme:
       testTargets: [AppTests, AppUITests]
   AppTests:

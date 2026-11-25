@@ -22,7 +22,8 @@ struct QawwamApp: App {
         }
     }
 
-    /// The real store, or for UI tests a fixed time (`-QawwamNow`) and a seeded scene (`-QawwamScene mockup`).
+    /// The real store, or for UI tests a fixed time (`-QawwamNow`) and a seeded scene (`-QawwamScene mockup`)
+    /// or a fresh install that shows onboarding (`-QawwamScene fresh`, cleared by `-QawwamReset YES`).
     @MainActor
     private static func makeStore(words: Words) -> TodayStore {
         let arguments = UserDefaults.standard
@@ -31,6 +32,10 @@ struct QawwamApp: App {
 
         if arguments.string(forKey: "QawwamScene") == "mockup", let fixedNow {
             let (store, defaults) = DemoScene.mockup(now: fixedNow)
+            return TodayStore(store: store, defaults: defaults, words: words, clock: clock)
+        }
+        if arguments.string(forKey: "QawwamScene") == "fresh" {
+            let (store, defaults) = DemoScene.fresh(reset: arguments.bool(forKey: "QawwamReset"))
             return TodayStore(store: store, defaults: defaults, words: words, clock: clock)
         }
 

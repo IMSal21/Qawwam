@@ -14,9 +14,10 @@ enum DemoScene {
         try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         let store = FilePrayerLogStore(fileURL: folder.appendingPathComponent("prayer-log.json"))
         let defaults = UserDefaults(suiteName: "qawwam-demo-\(UUID().uuidString)")!
+        OnboardingSettings(isDone: true, city: SaudiCities.riyadh).save(to: defaults)
 
         let calculator = PrayerTimesCalculator(settings: .ummAlQura)
-        guard let today = try? calculator.prayerDay(containing: now, at: TodayStore.riyadh, in: TodayStore.saudi)
+        guard let today = try? calculator.prayerDay(containing: now, at: SaudiCities.riyadh.location, in: TodayStore.saudi)
         else { return (store, defaults) }
         let first = DayKey(today).adding(days: -26)
         defaults.set(first.description, forKey: "firstDay")
@@ -26,7 +27,7 @@ enum DemoScene {
         var hijriDay = 4
         while key < DayKey(today) {
             let components = DateComponents(year: key.year, month: key.month, day: key.day)
-            if let day = try? calculator.day(components, at: TodayStore.riyadh, in: TodayStore.saudi) {
+            if let day = try? calculator.day(components, at: SaudiCities.riyadh.location, in: TodayStore.saudi) {
                 for (index, prayer) in Prayer.allCases.enumerated() {
                     if hijriDay == 17 && index >= 3 { continue }
                     let late = !fruitDays.contains(hijriDay) && hijriDay != 17 && index == hijriDay % 5
@@ -45,5 +46,19 @@ enum DemoScene {
         try? log.markPrayed(.dhuhr, in: today, at: today.time(of: .asr).addingTimeInterval(840))
         try? store.save(log)
         return (store, defaults)
+    }
+
+    /// A fresh install for the onboarding UI tests. It keeps its log and settings between launches so a
+    /// relaunch can be tested; `reset` clears them first.
+    static func fresh(reset: Bool) -> (PrayerLogStore, UserDefaults) {
+        let name = "qawwam-fresh"
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent(name)
+        let defaults = UserDefaults(suiteName: name)!
+        if reset {
+            try? FileManager.default.removeItem(at: folder)
+            defaults.removePersistentDomain(forName: name)
+        }
+        try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        return (FilePrayerLogStore(fileURL: folder.appendingPathComponent("prayer-log.json")), defaults)
     }
 }

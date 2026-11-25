@@ -57,7 +57,7 @@ final class FarmSceneTests: XCTestCase {
         var days: [PrayerDay] = []
         for date in 1...3 {
             let day = try calculator.day(
-                DateComponents(year: 2026, month: 11, day: date), at: TodayStore.riyadh, in: TodayStore.saudi)
+                DateComponents(year: 2026, month: 11, day: date), at: SaudiCities.riyadh.location, in: TodayStore.saudi)
             days.append(day)
             if date < 3 {
                 for prayer in Prayer.allCases {

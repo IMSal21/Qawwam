@@ -91,7 +91,7 @@ jobs:
             echo "| العربية | English |"
             echo "|---|---|"
             echo "| <img src=\"$base/today-ar.png\" width=\"280\"> | <img src=\"$base/today-en.png\" width=\"280\"> |"
-            for screen in farm; do
+            for screen in farm onb-why onb-city onb-farm; do
               if [ -f "$GITHUB_WORKSPACE/build/screenshots/$screen-ar.png" ]; then
                 echo "| <img src=\"$base/$screen-ar.png\" width=\"280\"> | <img src=\"$base/$screen-en.png\" width=\"280\"> |"
               fi

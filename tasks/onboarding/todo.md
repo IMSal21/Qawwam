@@ -3,17 +3,17 @@
 Tests first (pushed red), then the code (green). Linux and macOS CI must both pass.
 
 ## Task 1: Saudi cities (core)
-- [ ] 26 cities in 13 regions in the mockup's order, unique ids, Arabic and English names, coordinates inside Saudi Arabia
-- [ ] Search ignores case, tashkeel, أ/إ/آ/ا, ة/ه and ى/ي: "جده" finds جدة, "الاحساء" finds الأحساء, "riyadh" finds الرياض, "abc" finds nothing, empty text gives all
-- [ ] Nearest: a point in Jeddah gives جدة, one near Khamis Mushait gives خميس مشيط
+- [x] 26 cities in 13 regions in the mockup's order, unique ids, Arabic and English names, coordinates inside Saudi Arabia
+- [x] Search ignores case, tashkeel, أ/إ/آ/ا, ة/ه and ى/ي: "جده" finds جدة, "الاحساء" finds الأحساء, "riyadh" finds الرياض, "abc" finds nothing, empty text gives all
+- [x] Nearest: a point in Jeddah gives جدة, one near Khamis Mushait gives خميس مشيط
 - Files: `Sources/QawwamCore/Onboarding/SaudiCities.swift`, `Tests/.../Onboarding/SaudiCitiesTests.swift`
 
 ## Task 2: Settings and words (core)
-- [ ] `OnboardingSettings` saves and loads done, city and answers through UserDefaults; an unknown city id reads as not chosen
-- [ ] `OnboardingWords`: every line of the three steps, "1 من 3", the region headings, the empty search line, "مواقيت اليوم في جدة · أم القرى", the location error line; and English
+- [x] `OnboardingSettings` saves and loads done, city and answers through UserDefaults; an unknown city id reads as not chosen
+- [x] `OnboardingWords`: every line of the three steps, "1 من 3", the region headings, the empty search line, "مواقيت اليوم في جدة · أم القرى", the location error line; and English
 - Files: `Sources/QawwamCore/Onboarding/OnboardingSettings.swift`, `Localization/OnboardingWords.swift`, matching tests
 
-## Checkpoint: core done, CI green
+## Checkpoint: core done, CI green ✓
 
 ## Task 3: The app follows the city (app)
 - [ ] `TodayStore` takes a `City`; times, the today title and the farm use it; Riyadh if none is saved

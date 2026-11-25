@@ -25,7 +25,7 @@ struct PlaceholderWidget: Widget {
             Text(Words(.arabic).sunrise)
                 .containerBackground(.fill.tertiary, for: .widget)
         }
-        .configurationDisplayName("قوّام")
+        .configurationDisplayName("فلاح")
         .supportedFamilies([.systemSmall])
     }
 }

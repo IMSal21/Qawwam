@@ -16,22 +16,23 @@ Tests first (pushed red), then the code (green). Linux and macOS CI must both pa
 ## Checkpoint: core done, CI green ✓
 
 ## Task 3: The app follows the city (app)
-- [ ] `TodayStore` takes a `City`; times, the today title and the farm use it; Riyadh if none is saved
-- [ ] App test: a store with Jeddah gives Jeddah's times and "جدة"
+- [x] `TodayStore` takes a `City`; times, the today title and the farm use it; Riyadh if none is saved
+- [x] App test: a store with Jeddah gives Jeddah's times and "جدة"
 - Files: `App/TodayStore.swift`, `App/QawwamApp.swift`, `App/DemoScene.swift`, `AppTests/TodayStoreCityTests.swift`
 
-## Checkpoint: today and farm screenshots unchanged
+## Checkpoint: today and farm screenshots unchanged ✓
 
 ## Task 4: The three steps (app)
-- [ ] `OnboardingView`: progress bar, back button, step 1 cards (none ticked, Next always on), step 2 search, region list, tick and times card (Next off until a city is chosen), step 3 strip, lines and hadith card
-- [ ] `RootView` shows onboarding until done; "ابدأ مزرعتي" saves and opens the today screen
-- [ ] UI tests: a fresh launch shows step 1; search "جدة", pick it, finish, and the today screen shows جدة; a relaunch skips onboarding; screenshots `onb-why`, `onb-city`, `onb-farm` in Arabic and English
+- [x] `OnboardingView`: progress bar, back button, step 1 cards (none ticked, Next always on), step 2 search, region list, tick and times card (Next off until a city is chosen), step 3 strip, lines and hadith card
+- [x] `RootView` shows onboarding until done; "ابدأ مزرعتي" saves and opens the today screen
+- [x] UI tests: a fresh launch shows step 1; search "جدة", pick it, finish, and the today screen shows جدة; a relaunch skips onboarding; screenshots `onb-why`, `onb-city`, `onb-farm` in Arabic and English
 - Files: `App/Onboarding/OnboardingView.swift`, `App/Onboarding/GrowthStrip.swift`, `App/RootView.swift`, `AppUITests/OnboardingTests.swift`, `.github/workflows/ios.yml`
 
 ## Task 5: Use my location (app)
-- [ ] `CityLocator` asks once, gets one location, picks the nearest city; refused or failed shows the error line and keeps the list
-- [ ] Info.plist location reason in Arabic and English
+- [x] `CityLocator` asks once (the permission prompt waits for a real phone), gets one location, picks the nearest city; refused or failed shows the error line and keeps the list
+- [x] Info.plist location reason in Arabic and English
 - Files: `App/Onboarding/CityLocator.swift`, `project.yml`
 
 ## Checkpoint: complete
-- [ ] Arabic screenshots match the mockups; all tests green; PR ready
+- [ ] Arabic screenshots match the mockups (waiting for Meshari's look)
+- [x] All tests green; PR ready
